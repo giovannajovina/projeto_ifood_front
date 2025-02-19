@@ -4,7 +4,6 @@ body {
     padding: 0;
     background-color: #f8f8f8;
 }
-
 header {
     display: flex;
     justify-content: space-between;
@@ -12,20 +11,18 @@ header {
     background-color: #fff;
     padding: 10px 20px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
-
 .logo {
     font-size: 24px;
     font-weight: bold;
     color: red;
 }
-
 .navbar {
     display: flex;
     align-items: center;
     gap: 20px;
 }
-
 nav ul {
     list-style: none;
     display: flex;
@@ -33,17 +30,14 @@ nav ul {
     padding: 0;
     margin: 0;
 }
-
 nav ul li {
     display: inline;
 }
-
 nav ul li a {
     text-decoration: none;
     color: #333;
     font-weight: bold;
 }
-
 .search-bar {
     display: flex;
     align-items: center;
@@ -51,7 +45,6 @@ nav ul li a {
     padding: 5px 10px;
     border-radius: 20px;
 }
-
 .search-bar input {
     border: none;
     outline: none;
@@ -59,16 +52,64 @@ nav ul li a {
     padding: 5px;
     box-shadow: none;
 }
-
 .icons {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
-input[type="text"] {
-    padding: 8px;
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
 }
+.mobile-nav {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1;
+}
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+.mobile-nav ul li {
+    padding: 10px;
+}
+.mobile-nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    display: block;
+}
+@media (max-width: 1200px) {
+    .navbar nav, .icons {
+        display: none;
+    }
+    .menu-toggle {
+        display: block;
+        margin-left: auto;
+    }
+    .mobile-nav.active {
+        display: flex;
+    }
+    .store-list {
+        padding-left: 15px;
+        padding-right: 10px;
+    }
+
+}
+
+
 
 .filters {
     display: flex;
@@ -174,11 +215,11 @@ input[type="text"] {
 }
 
 .store-list {
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 0px;
+    padding-right: 0px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
+    gap: 10px;
 }
 
 .store {
@@ -215,6 +256,7 @@ input[type="text"] {
     font-size: 14px;
     color: #666;
 }
+
 
 .categories {
     text-align: center;

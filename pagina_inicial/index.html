@@ -13,6 +13,7 @@
 <body>
     <header>
         <div class="logo">iFood Clone</div>
+        
         <div class="navbar">
             <nav>
                 <ul>
@@ -28,13 +29,30 @@
             <div class="search-bar">
                 <input type="text" placeholder="Busque por item ou loja">
             </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         </div>
         <div class="icons">
             <span>localização tal</span>
             <span>🛒 R$ 0,00</span>
             <span>🔓</span>
         </div>
+        <div class="mobile-nav" id="mobileNav">
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Restaurantes</a></li>
+                <li><a href="#">Mercados</a></li>
+                <li><a href="#">Bebidas</a></li>
+                <li><a href="#">Farmácias</a></li>
+                <li><a href="#">Pets</a></li>
+                <li><a href="#">Shopping</a></li>
+            </ul>
+        </div>
     </header>
+    <script>
+        function toggleMenu() {
+            document.getElementById("mobileNav").classList.toggle("active");
+        }
+    </script>
 
     <section class="categories">
         <h2>Conheça as categorias</h2>
