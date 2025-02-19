@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clone iFood - Carrossel Horizontal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* Estilizando o carrossel horizontal */
+        .carrossel-horizontal {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 15px;
+            padding-bottom: 10px;
+        }
+
+        .carrossel-horizontal::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .carrossel-horizontal::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+
+        .item-carrossel {
+            min-width: 250px;
+            flex: 0 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-carrossel img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .seta {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 24px;
+            z-index: 10;
+        }
+
+        .seta-esquerda {
+            left: 5px;
+        }
+
+        .seta-direita {
+            right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Cabeçalho -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">iFood Clone</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Restaurantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Promoções</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sessão 1 - Categorias -->
+    <div class="container mt-4 position-relative">
+        <h2>Categorias</h2>
+        <button class="seta seta-esquerda" onclick="scrollCarousel('categorias-container', -300)">‹</button>
+        <div id="categorias-container" class="carrossel-horizontal"></div>
+        <button class="seta seta-direita" onclick="scrollCarousel('categorias-container', 300)">›</button>
+    </div>
+
+    <!-- Sessão 2 - Restaurantes -->
+    <div class="container mt-4 position-relative">
+        <h2>Restaurantes Populares</h2>
+        <button class="seta seta-esquerda" onclick="scrollCarousel('restaurantes-container', -300)">‹</button>
+        <div id="restaurantes-container" class="carrossel-horizontal"></div>
+        <button class="seta seta-direita" onclick="scrollCarousel('restaurantes-container', 300)">›</button>
+    </div>
+
+    <!-- Sessão 3 - Promoções -->
+    <div class="container mt-4 mb-5 position-relative">
+        <h2>Promoções Especiais</h2>
+        <button class="seta seta-esquerda" onclick="scrollCarousel('promocoes-container', -300)">‹</button>
+        <div id="promocoes-container" class="carrossel-horizontal"></div>
+        <button class="seta seta-direita" onclick="scrollCarousel('promocoes-container', 300)">›</button>
+    </div>
+
+    <script>
+        // Dados fixos para testes
+        const dadosFixos = {
+            "categorias": [
+                { "nome": "Padarias", "imagem": "https://via.placeholder.com/250x150?text=Padarias" },
+                { "nome": "Salgados", "imagem": "https://via.placeholder.com/250x150?text=Salgados" },
+                { "nome": "Doces & Bolos", "imagem": "https://via.placeholder.com/250x150?text=Doces+Bolos" },
+                { "nome": "Japonesa", "imagem": "https://via.placeholder.com/250x150?text=Padarias" },
+                { "nome": "italiana", "imagem": "https://via.placeholder.com/250x150?text=Salgados" },
+                { "nome": "arabe", "imagem": "https://via.placeholder.com/250x150?text=Doces+Bolos" }
+            ],
+            "restaurantes": [
+                { "nome": "Hamburgueria XPTO", "imagem": "https://via.placeholder.com/250x150?text=Hamburgueria" },
+                { "nome": "Pizzaria Delícia", "imagem": "https://via.placeholder.com/250x150?text=Pizzaria" },
+                { "nome": "Comida Japonesa", "imagem": "https://via.placeholder.com/250x150?text=Comida+Japonesa" }
+            ],
+            "promocoes": [
+                { "nome": "Cupom R$10 OFF", "imagem": "https://via.placeholder.com/250x150?text=Cupom+R$10+OFF" },
+                { "nome": "Entrega Grátis", "imagem": "https://via.placeholder.com/250x150?text=Entrega+Gratis" },
+                { "nome": "Desconto 20%", "imagem": "https://via.placeholder.com/250x150?text=Desconto+20%" }
+            ]
+        };
+
+        // Função para preencher os carrosséis
+        function populateCarousel(items, containerId) {
+            let container = document.getElementById(containerId);
+            container.innerHTML = ""; // Limpa antes de preencher
+
+            items.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-carrossel">
+                        <img src="${item.imagem}" alt="${item.nome}">
+                        <div class="text-center p-2 bg-light"><strong>${item.nome}</strong></div>
+                    </div>
+                `;
+            });
+        }
+
+        // Função para rolar o carrossel horizontalmente
+        function scrollCarousel(id, distance) {
+            document.getElementById(id).scrollBy({ left: distance, behavior: "smooth" });
+        }
+
+        // Inicia o carregamento dos dados fixos
+        populateCarousel(dadosFixos.categorias, "categorias-container");
+        populateCarousel(dadosFixos.restaurantes, "restaurantes-container");
+        populateCarousel(dadosFixos.promocoes, "promocoes-container");
+    </script>
+
+</body>
+
+</html>
