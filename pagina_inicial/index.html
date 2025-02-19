@@ -1,158 +1,291 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clone iFood - Carrossel Horizontal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        /* Estilizando o carrossel horizontal */
-        .carrossel-horizontal {
-            display: flex;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            gap: 15px;
-            padding-bottom: 10px;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clone iFood</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="../config.js"></script>
 
-        .carrossel-horizontal::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .carrossel-horizontal::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 10px;
-        }
-
-        .item-carrossel {
-            min-width: 250px;
-            flex: 0 0 auto;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .item-carrossel img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .seta {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 24px;
-            z-index: 10;
-        }
-
-        .seta-esquerda {
-            left: 5px;
-        }
-
-        .seta-direita {
-            right: 5px;
-        }
-    </style>
 </head>
 
 <body>
-
-    <!-- Cabeçalho -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">iFood Clone</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Restaurantes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Promoções</a></li>
+    <header>
+        <div class="logo">iFood Clone</div>
+        <div class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Restaurantes</a></li>
+                    <li><a href="#">Mercados</a></li>
+                    <li><a href="#">Bebidas</a></li>
+                    <li><a href="#">Farmácias</a></li>
+                    <li><a href="#">Pets</a></li>
+                    <li><a href="#">Shopping</a></li>
                 </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Busque por item ou loja">
             </div>
         </div>
-    </nav>
+        <div class="icons">
+            <span>localização tal</span>
+            <span>🛒 R$ 0,00</span>
+            <span>🔓</span>
+        </div>
+    </header>
 
-    <!-- Sessão 1 - Categorias -->
-    <div class="container mt-4 position-relative">
-        <h2>Categorias</h2>
-        <button class="seta seta-esquerda" onclick="scrollCarousel('categorias-container', -300)">‹</button>
-        <div id="categorias-container" class="carrossel-horizontal"></div>
-        <button class="seta seta-direita" onclick="scrollCarousel('categorias-container', 300)">›</button>
-    </div>
+    <section class="categories">
+        <h2>Conheça as categorias</h2>
+        <div class="carousel-container">
+            <button class="carousel-btn prev" onclick="scrollCarousel(-1)">&lt;</button>
+            <div class="category-list" id="category-list"></div>
+            <button class="carousel-btn next" onclick="scrollCarousel(1)">&gt;</button>
+        </div>
+    </section>
 
-    <!-- Sessão 2 - Restaurantes -->
-    <div class="container mt-4 position-relative">
-        <h2>Restaurantes Populares</h2>
-        <button class="seta seta-esquerda" onclick="scrollCarousel('restaurantes-container', -300)">‹</button>
-        <div id="restaurantes-container" class="carrossel-horizontal"></div>
-        <button class="seta seta-direita" onclick="scrollCarousel('restaurantes-container', 300)">›</button>
-    </div>
+    <script>
 
-    <!-- Sessão 3 - Promoções -->
-    <div class="container mt-4 mb-5 position-relative">
-        <h2>Promoções Especiais</h2>
-        <button class="seta seta-esquerda" onclick="scrollCarousel('promocoes-container', -300)">‹</button>
-        <div id="promocoes-container" class="carrossel-horizontal"></div>
-        <button class="seta seta-direita" onclick="scrollCarousel('promocoes-container', 300)">›</button>
+        async function loadCategories() {
+            try {
+                const apiUrl = config.API_URL+"/api/categories/list";
+                console.log("Buscando categorias em:", apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        "bypass-tunnel-reminder": "true"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+
+                const categories = await response.json();
+                console.log("Categorias recebidas:", categories);
+
+                const categoryList = document.getElementById("category-list");
+                categoryList.innerHTML = ""; // Limpa a lista antes de adicionar os itens
+
+                categories.forEach(category => {
+                    const div = document.createElement("div");
+                    div.classList.add("category");
+                    div.innerHTML = `<img src="${category.description}" alt="${category.name}"> ${category.name}`;
+                    categoryList.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error("Erro ao carregar categorias:", error);
+                alert("Erro ao carregar categorias. Verifique o console para mais detalhes.");
+            }
+
+        };
+        loadCategories();
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('category-list');
+            const scrollAmount = 220;
+            carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+    </script>
+    <section class="banner">
+
+        <div class="carousel-container">
+            <button class="carousel-btn prev" onclick="scrollCarouselbanner(-1)">&lt;</button>
+            <div class="banner-list" id="banner-list"></div>
+            <button class="carousel-btn next" onclick="scrollCarouselbanner(1)">&gt;</button>
+        </div>
+    </section>
+    <!-- <script>
+
+        async function loadBanner() {
+            try {
+                const apiUrl = config.API_URL+"/api/banner/list";
+                console.log("Buscando banner em:", apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        "bypass-tunnel-reminder": "true"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+
+                const banner = await response.json();
+                console.log("banner recebidas:", banner);
+
+                const bannerList = document.getElementById("banner-list");
+                bannerList.innerHTML = ""; // Limpa a lista antes de adicionar os itens
+
+                banner.forEach(banner => {
+                    const div = document.createElement("div");
+                    div.classList.add("banner");
+                    div.innerHTML = `<img src="${banner.description}" alt="${banner.name}"> ${banner.name}`;
+                    bannerList.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error("Erro ao carregar banner:", error);
+                alert("Erro ao carregar banner. Verifique o console para mais detalhes.");
+            }
+
+        };
+        loadBanner();
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('banner-list');
+            const scrollAmount = 220;
+            carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+    </script> -->
+    <script>
+        const banner = [
+            { name: "Sorvetes", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Italiana", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Pastel", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Pizza", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Marmita", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Vegetariana", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Gourmet", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Japonesa", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Carnes", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Chinesa", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Seila", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Comidinha", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Comidona", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Testando", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "OutroTest", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" },
+            { name: "Japonesa", image: "https://static.ifood-static.com.br/image/upload/t_high/discoveries/1306PromotionsCampanhasSeloPIJCampanhasAlwaysOncafeprincipal_sMXA.png?imwidth=3840" }
+        ];
+        const bannerlist = document.getElementById("banner-list");
+
+        banner.forEach(banner => {
+            const div = document.createElement("div");
+            div.classList.add("banner");
+            div.innerHTML = `<img src="${banner.image}" alt="${banner.name}">${banner.name}`;
+            bannerlist.appendChild(div);
+        });
+
+        function scrollCarouselbanner(direction) {
+            const carousel = document.getElementById('banner-list');
+            const scrollAmount = 220;
+            carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+    </script>
+
+    <section class="filters">
+        <button onclick="toggleFilterMenu('order')">Ordenar </button>
+        <button onclick="toggleFilterMenu('vale')">Vale-refeição </button>
+        <button onclick="toggleFilterMenu('distance')">Distância </button>
+        <button onclick="toggleFilterMenu('order')">Ordenar </button>
+        <button onclick="toggleFilterMenu('order')">Ordenar </button>
+        <button onclick="toggleFilterMenu('vale')">Vale-refeição </button>
+        <button onclick="toggleFilterMenu('distance')">Distância </button>
+        <button onclick="toggleFilterMenu('distance')">Distância </button>
+        <button onclick="toggleFilterMenu('filters')">Filtros ⚙</button>
+    </section>
+
+    <div class="filter-menu" id="filterMenu">
+        <div class="filter-header">
+            <h3>Filtros</h3>
+            <span style="color: red; cursor: pointer;" onclick="toggleFilterMenu('')">Limpar</span>
+        </div>
+        <div class="filter-tabs">
+            <span class="active" onclick="showTab('basicos')">Básicos</span>
+            <span onclick="showTab('categorias')">Categorias</span>
+            <span onclick="showTab('pagamentos')">Pagamentos</span>
+        </div>
+        <div class="filter-content" id="basicos">
+            <h4>Modo de entrega</h4>
+            <div class="filter-options">
+                <button>Entrega</button>
+                <button>Pra retirar</button>
+            </div>
+            <h4>Ordenar por</h4>
+            <div class="filter-options">
+                <button>Ordenação</button>
+                <button>Preço</button>
+                <button>Avaliação</button>
+                <button>Tempo</button>
+                <button>Taxa</button>
+                <button>Menor Distância</button>
+            </div>
+        </div>
+        <div class="filter-content" id="categorias" style="display: none;">
+            <h4>Tipo de loja</h4>
+            <div class="filter-options">
+                <button>Todas as lojas</button>
+                <button>Restaurante</button>
+                <button>Mercado</button>
+            </div>
+        </div>
+        <div class="filter-content" id="pagamentos" style="display: none;">
+            <h4>Preço médio</h4>
+            <div class="filter-options">
+                <button>$</button>
+                <button>$$</button>
+                <button>$$$</button>
+                <button>$$$$</button>
+                <button>$$$$$</button>
+            </div>
+            <h4>Pagamento pelo site</h4>
+            <div class="filter-options">
+                <button>Pix</button>
+                <button>Elo</button>
+                <button>Mastercard</button>
+                <button>Mastercard Maestro</button>
+                <button>Visa</button>
+                <button>Visa Electron</button>
+                <button>Amex</button>
+                <button>Diners</button>
+            </div>
+        </div>
+        <div class="apply-filter" onclick="toggleFilterMenu('')">Ver resultados</div>
     </div>
 
     <script>
-        // Dados fixos para testes
-        const dadosFixos = {
-            "categorias": [
-                { "nome": "Padarias", "imagem": "https://via.placeholder.com/250x150?text=Padarias" },
-                { "nome": "Salgados", "imagem": "https://via.placeholder.com/250x150?text=Salgados" },
-                { "nome": "Doces & Bolos", "imagem": "https://via.placeholder.com/250x150?text=Doces+Bolos" },
-                { "nome": "Japonesa", "imagem": "https://via.placeholder.com/250x150?text=Padarias" },
-                { "nome": "italiana", "imagem": "https://via.placeholder.com/250x150?text=Salgados" },
-                { "nome": "arabe", "imagem": "https://via.placeholder.com/250x150?text=Doces+Bolos" }
-            ],
-            "restaurantes": [
-                { "nome": "Hamburgueria XPTO", "imagem": "https://via.placeholder.com/250x150?text=Hamburgueria" },
-                { "nome": "Pizzaria Delícia", "imagem": "https://via.placeholder.com/250x150?text=Pizzaria" },
-                { "nome": "Comida Japonesa", "imagem": "https://via.placeholder.com/250x150?text=Comida+Japonesa" }
-            ],
-            "promocoes": [
-                { "nome": "Cupom R$10 OFF", "imagem": "https://via.placeholder.com/250x150?text=Cupom+R$10+OFF" },
-                { "nome": "Entrega Grátis", "imagem": "https://via.placeholder.com/250x150?text=Entrega+Gratis" },
-                { "nome": "Desconto 20%", "imagem": "https://via.placeholder.com/250x150?text=Desconto+20%" }
-            ]
-        };
-
-        // Função para preencher os carrosséis
-        function populateCarousel(items, containerId) {
-            let container = document.getElementById(containerId);
-            container.innerHTML = ""; // Limpa antes de preencher
-
-            items.forEach(item => {
-                container.innerHTML += `
-                    <div class="item-carrossel">
-                        <img src="${item.imagem}" alt="${item.nome}">
-                        <div class="text-center p-2 bg-light"><strong>${item.nome}</strong></div>
-                    </div>
-                `;
-            });
+        function toggleFilterMenu(type) {
+            const menu = document.getElementById('filterMenu');
+            if (type === 'filters') {
+                menu.classList.add('active');
+            } else {
+                menu.classList.remove('active');
+            }
         }
-
-        // Função para rolar o carrossel horizontalmente
-        function scrollCarousel(id, distance) {
-            document.getElementById(id).scrollBy({ left: distance, behavior: "smooth" });
+        function showTab(tab) {
+            document.querySelectorAll('.filter-content').forEach(el => el.style.display = 'none');
+            document.getElementById(tab).style.display = 'block';
         }
+    </script>
 
-        // Inicia o carregamento dos dados fixos
-        populateCarousel(dadosFixos.categorias, "categorias-container");
-        populateCarousel(dadosFixos.restaurantes, "restaurantes-container");
-        populateCarousel(dadosFixos.promocoes, "promocoes-container");
+    <section class="store-list" id="store-list"></section>
+
+    <script>
+        const stores = [
+            { name: "Churrascaria e Restaurante", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "42-52 min", price: "R$ 10,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Seringueira Express", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "49-59 min", price: "R$ 9,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Rei das Marmitas", rating: "4.9", category: "Marmita", distance: "2.8 km", time: "39-49 min", price: "R$ 14,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Churrascaria e Restaurante", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "42-52 min", price: "R$ 10,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Seringueira Express", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "49-59 min", price: "R$ 9,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Rei das Marmitas", rating: "4.9", category: "Marmita", distance: "2.8 km", time: "39-49 min", price: "R$ 14,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Churrascaria e Restaurante", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "42-52 min", price: "R$ 10,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Seringueira Express", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "49-59 min", price: "R$ 9,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Rei das Marmitas", rating: "4.9", category: "Marmita", distance: "2.8 km", time: "39-49 min", price: "R$ 14,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Churrascaria e Restaurante", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "42-52 min", price: "R$ 10,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Seringueira Express", rating: "4.8", category: "Brasileira", distance: "2.2 km", time: "49-59 min", price: "R$ 9,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" },
+            { name: "Rei das Marmitas", rating: "4.9", category: "Marmita", distance: "2.8 km", time: "39-49 min", price: "R$ 14,99", image: "https://static.ifood-static.com.br/image/upload/t_medium/logosgde/06b1ec5f-2c6e-45db-82c9-79f9d86897b7/202404241342_hbVX_i.jpg?imwidth=256" }
+
+        ];
+
+        const storeList = document.getElementById("store-list");
+
+        stores.forEach(store => {
+            const div = document.createElement("div");
+            div.classList.add("store");
+            div.innerHTML = `<img src="${store.image}" alt="${store.name}"><div class="store-info"><strong>${store.name}</strong><span>⭐ ${store.rating} • ${store.category} • ${store.distance}</span><span>${store.time} • ${store.price}</span></div>`;
+            storeList.appendChild(div);
+        });
     </script>
 
 </body>
