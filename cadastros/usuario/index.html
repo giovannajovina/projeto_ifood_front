@@ -1,1 +1,91 @@
-tes
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - ClickFood</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <img src="../imagens/logo-clickfood.png" alt="ClickFood Logo" class="logo">
+        <h1>Cadastro</h1>
+        <form id="cadastroForm">
+            <input type="hidden" id="editIndex"> <!-- Armazena o índice do usuário editado -->
+
+            <div class="input-group">
+                <input type="text" id="firstName" name="NomeCompleto" placeholder="Nome Completo" required>
+                <input type="text" id="lastName" name="CPF" placeholder="CPF" required>
+            </div>
+            <div class="input-group">
+                <input type="tel" id="phone" name="phone" placeholder="Telefone" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="Criar Senha" required>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar Senha" required>
+            </div>
+            <button type="submit" class="btn">Salvar</button>
+        </form>
+        <!-- <a href="./segundaTela.html" class="link">Visualizar Usuários</a> -->
+    </div>
+
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
+
+<script>
+    document.getElementById("cadastroForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Previne o envio padrão do formulário
+
+    // Captura os valores dos campos
+    const nome = document.getElementById("firstName").value;
+    const cpf = document.getElementById("lastName").value;
+    const celular = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmarSenha = document.getElementById("confirmPassword").value;
+
+    // Verifica se as senhas coincidem
+    if (password !== confirmarSenha) {
+        alert("As senhas não coincidem!");
+        return;
+    }
+
+    // Dados que serão enviados via POST
+    const dados = {
+        nome,
+        cpf,
+        celular,
+        email,
+        password
+    };
+
+    console.log(dados)
+
+    // Envia os dados via POST
+    fetch('https://shaky-moles-appear.loca.lt/api/usuario/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // Indica que estamos enviando dados no formato JSON
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(dados) // Converte o objeto para uma string JSON
+    })
+    .then(response => response.json()) // Converte a resposta da API em JSON
+    .then(data => {
+        if (data.success) {
+            alert("Cadastro realizado com sucesso!");
+            // window.location.href = "./segundaTela.html"; // Redireciona para a página de visualização
+            console.log(data);
+        } else {
+            alert("Erro ao cadastrar. Tente novamente.");
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao enviar dados:", error);
+        alert("Ocorreu um erro. Tente novamente.");
+    });
+});
+
+</script>
