@@ -1,3 +1,3 @@
 const config = {
-    API_URL : "https://fair-socks-spend.loca.lt/"
+    API_URL : "https://clickfood.shop"
 }
