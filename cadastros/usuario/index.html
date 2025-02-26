@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - ClickFood</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
     <div class="container">
         <img src="../imagens/logo-clickfood.png" alt="ClickFood Logo" class="logo">
@@ -23,7 +25,8 @@
             </div>
             <div class="input-group">
                 <input type="password" id="password" name="password" placeholder="Criar Senha" required>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar Senha" required>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar Senha"
+                    required>
             </div>
             <button type="submit" class="btn">Salvar</button>
         </form>
@@ -32,60 +35,72 @@
 
     <!-- <script src="script.js"></script> -->
 </body>
+
 </html>
 
 <script>
-    document.getElementById("cadastroForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Previne o envio padrão do formulário
-
-    // Captura os valores dos campos
-    const nome = document.getElementById("firstName").value;
-    const cpf = document.getElementById("lastName").value;
-    const celular = document.getElementById("phone").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmarSenha = document.getElementById("confirmPassword").value;
-
-    // Verifica se as senhas coincidem
-    if (password !== confirmarSenha) {
-        alert("As senhas não coincidem!");
-        return;
-    }
-
-    // Dados que serão enviados via POST
-    const dados = {
-        nome,
-        cpf,
-        celular,
-        email,
-        password
-    };
-
-    console.log(dados)
-
-    // Envia os dados via POST
-    fetch('https://shaky-moles-appear.loca.lt/api/usuario/save', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json', // Indica que estamos enviando dados no formato JSON
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(dados) // Converte o objeto para uma string JSON
-    })
-    .then(response => response.json()) // Converte a resposta da API em JSON
-    .then(data => {
-        if (data.success) {
-            alert("Cadastro realizado com sucesso!");
-            // window.location.href = "./segundaTela.html"; // Redireciona para a página de visualização
-            console.log(data);
-        } else {
-            alert("Erro ao cadastrar. Tente novamente.");
+    document.getElementById("cadastroForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Previne o envio padrão do formulário
+        
+        
+        const celular = document.getElementById("phone").value.replace(/\D/g, ""); // Remove tudo que não for número
+        if (celular.length !== 11) {
+            alert("O telefone deve ter DDD + 9 números (ex: 11987654321)");
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Erro ao enviar dados:", error);
-        alert("Ocorreu um erro. Tente novamente.");
+        // Captura os valores dos campos
+        const nome = document.getElementById("firstName").value;
+        const cpf = document.getElementById("lastName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmarSenha = document.getElementById("confirmPassword").value;
+
+        // Verifica se as senhas coincidem
+        if (password !== confirmarSenha) {
+            alert("As senhas não coincidem!");
+            return;
+        }
+
+        // Cria um objeto FormData para enviar os dados como multipart/form-data
+        const formData = new FormData();
+        formData.append('nome', nome);
+        formData.append('cpf', cpf);
+        formData.append('celular', celular);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('password_confirmation', confirmarSenha);
+
+        // Envia os dados via POST
+        fetch('https://clickfood.shop/api/usuario/save', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(({ status, body }) => {
+                if (status === 200 || status === 201) {
+                    alert("Cadastro realizado com sucesso!");
+                    console.log(body);
+                } else if (status === 422) {
+                    // Mostra os erros de validação
+                    let errorMessage = "Erro ao cadastrar:\n";
+                    Object.keys(body.errors).forEach(key => {
+                        errorMessage += `- ${body.errors[key][0]}\n`;
+                    });
+                    alert(errorMessage);
+                    console.error("Erros de validação:", body.errors);
+                } else {
+                    alert("Erro inesperado. Tente novamente.");
+                    console.error("Erro:", body);
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao enviar dados:", error);
+                alert("Ocorreu um erro. Verifique o console.");
+            });
+
     });
-});
 
 </script>
