@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login iFood Clone</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fdecef;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            justify-content: center;
+            align-items: center;
+        }
+        .left, .right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .left {
+            width: 50%;
+            min-width: 300px;
+        }
+        .right {
+            width: 50%;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .login-box {
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-facebook {
+            background-color: #1877f2;
+            color: white;
+        }
+        .btn-google {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+        }
+        .btn-alt {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            display: inline-block;
+            width: 100%;
+        }
+        .foto{
+            width: 100%;
+            max-width: 44%;
+            height: auto;
+        }
+        @media (max-width: 766px) {
+            body{
+                margin-left: 2px;
+            }
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .left {
+                order: -1;
+                width: 10%;
+            }
+            .right {
+            
+                min-width: 230px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="logo.png" alt="Ilustração de entrega" class="foto">
+        </div>
+        <div class="right">
+            <div class="login-box">
+                <h1>Falta pouco para matar sua fome!</h1>
+                <p>Como deseja continuar?</p>
+                <button class="btn btn-facebook">Continuar com Facebook</button>
+                <button class="btn btn-google">Fazer login com o Google</button>
+                <div>
+                    <button class="btn btn-alt">
+                       <a href="../login/index.html">E-mail</a> 
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
