@@ -30,7 +30,7 @@
             </div>
             <button type="submit" class="btn">Salvar</button>
         </form>
-        <!-- <a href="./segundaTela.html" class="link">Visualizar Usuários</a> -->
+        <a href="./visualizaruser.html" class="link">Visualizar Usuários</a>
     </div>
 
     <!-- <script src="script.js"></script> -->
@@ -42,7 +42,7 @@
     document.getElementById("cadastroForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Previne o envio padrão do formulário
         
-        
+
         const celular = document.getElementById("phone").value.replace(/\D/g, ""); // Remove tudo que não for número
         if (celular.length !== 11) {
             alert("O telefone deve ter DDD + 9 números (ex: 11987654321)");
