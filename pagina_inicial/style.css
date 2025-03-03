@@ -91,6 +91,82 @@ nav ul li a {
     font-weight: bold;
     display: block;
 }
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.219);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.prev {
+    left: 100px;
+}
+
+.next {
+    right: 100px;
+}
+/* ---------------- */
+
+.banner {
+    text-align: center;
+    padding: 15px;
+}
+
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.banner-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.banner {
+
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    text-align: center;
+}
+
+.banner img {
+    width: 380px;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 5px;
+    border-radius: 5px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1;
+}
+.modal.active {
+    display: block;
+}
 @media (max-width: 1200px) {
     .navbar nav, .icons {
         display: none;
@@ -106,10 +182,53 @@ nav ul li a {
         padding-left: 15px;
         padding-right: 10px;
     }
+    .logo {
+        width: 20px;
+    }
+    .location {
+        display:none;
+    }
+    .prev {
+        left: 40px;
+    }
+    
+    .next {
+        right: 40px;
+    }
+    .filters {
+        padding: 15px;
+        padding-left: 10%;
+    }
+    .modal {
+        width: 200px;
+    }
 
 }
+@media (max-width: 435px) {
+    .search-bar input {
+    width: 45px;
+    }
+    .logo {
+        font-size: 18px;
+    }
+    .banner img {
+        width: 235px;
+        height: 100px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto 5px;
+        border-radius: 5px;
+    }
+    .filters {
+        padding: 15px;
+        padding-left: 10%;
+    }
+    .modal {
+        width: 200px;
+    }
 
 
+}
 
 .filters {
     display: flex;
@@ -260,7 +379,7 @@ nav ul li a {
 
 .categories {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .carousel-container {
@@ -296,65 +415,41 @@ nav ul li a {
     border-radius: 5px;
 }
 
-/* ---------------- */
 
-.banner {
-    text-align: center;
-    padding: 20px;
-}
-
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    padding: 20px;
-}
-
-.banner-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-}
-
-.banner {
-
-    padding: 10px 15px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    text-align: center;
-}
-
-.banner img {
-    width: 380px;
-    height: 190px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto 5px;
-    border-radius: 5px;
-}
 
 /* --------------- */
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.219);
-    color: white;
-    border: none;
-    padding: 10px;
+
+
+.close-btn {
     cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    font-size: 20px;
+    float: right;
 }
-
-.prev {
-    left: 100px;
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
-
-.next {
-    right: 100px;
+.location-icon {
+    cursor: pointer;
+}
+.menu-list {
+    list-style: none;
+    padding: 0;
+}
+.menu-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.menu-list li:hover{
+    color: #ee5d5d;
+}
+.menu-list li img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
 }
