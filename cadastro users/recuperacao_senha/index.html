@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - iFood Clone</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fdecef;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            justify-content: center;
+            align-items: center;
+        }
+        .left, .right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .left {
+            width: 50%;
+            min-width: 300px;
+        }
+        .right {
+            width: 50%;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .foto{
+            width: 100%;
+            max-width: 44%;
+            height: auto;
+        }
+        h2, p {
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #1877f2;
+            color: white;
+            cursor: pointer;
+        }
+        .link {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #1877f2;
+        }
+        @media (max-width: 766px) {
+            body{
+                margin-left: 3px;
+            }
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .left {
+                order: -1;
+                width: 100%;
+            }
+            .right {
+                min-width: 250px;
+                
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .link {
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="logo.png" alt="Ilustração de entrega" class="foto">
+        </div>
+        <div class="right">
+            <h2>Recuperar Senha</h2>
+            <p>Digite seu email para receber um link de redefinição de senha.</p>
+            <form id="forgotPasswordForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <button type="submit" class="btn">Enviar</button>
+            </form>
+            <a href="../index.html" class="link">Voltar ao login</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById("forgotPasswordForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            
+            fetch('https://clickfood.shop/api/auth/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert("Verifique seu email para redefinir sua senha.");
+                } else {
+                    alert("Erro ao solicitar recuperação de senha. Verifique o email informado.");
+                }
+            })
+            .catch(error => console.error("Erro ao enviar solicitação:", error));
+        });
+    </script>
+</body>
+</html>
