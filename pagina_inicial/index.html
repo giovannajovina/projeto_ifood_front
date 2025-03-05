@@ -36,23 +36,24 @@
     
     <div id="sideModal" class="modal">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
-        <h2>Olá, Giovanna</h2>
+        <div class="nome">
+            <h2 > Olá, </h2>
+            <h2 id="nome"> </h2>
+        </div>
         <ul class="menu-list">
             <li><img src="imagens/teste.png" alt="Pedidos">Pedidos</li>
             <li><img src="imagens/teste.png" alt="Pagamento">Pagamento</li>
             <li><img src="imagens/teste.png" alt="Meus Dados">Meus dados</li>
+            <li><img src="imagens/teste.png" alt="Meus Dados">Meu endereço</li>
         </ul>
     </div>
-    
-    <script>
-        function toggleModal() {
-            document.getElementById('sideModal').classList.toggle('active');
-        }
-    </script>
 
     <script>
         function toggleMenu() {
             document.getElementById("mobileNav").classList.toggle("active");
+        }
+        function toggleModal() {
+            document.getElementById('sideModal').classList.toggle('active');
         }
     </script>
 
@@ -307,7 +308,32 @@
             storeList.appendChild(div);
         });
     </script>
+        <script>
+            // Verifica se o usuário está autenticado
+            const user = JSON.parse(localStorage.getItem("user"));
+            const token = localStorage.getItem("token");
+    
+            if (!user || !token) {
+                window.location.href = "../login/index.html"; // Redireciona para login se não estiver autenticado
+            } else {
+                document.getElementById("nome").textContent = user.nome;
+            }
+    
+            // // Logout
+            // document.getElementById("logoutButton").addEventListener("click", async () => {
+            //     await fetch("http://seu-servidor/api/logout", {
+            //         method: "POST",
+            //         headers: { "Authorization": "Bearer " + token }
+            //     });
+    
+            //     // Remove token e redireciona para o login
+            //     localStorage.removeItem("token");
+            //     localStorage.removeItem("user");
+            //     window.location.href = "index.html";
+            // });
+        </script>
 
 </body>
 
 </html>
+

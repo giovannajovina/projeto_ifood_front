@@ -453,3 +453,6 @@ nav ul li a {
     height: 24px;
     margin-right: 10px;
 }
+.nome{
+    display: flex;
+}
