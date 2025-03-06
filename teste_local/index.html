@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecionar Endereço</title>
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkykjH21ut-e8c_F90tJmgO6IX2KvALZ4&libraries=places&callback=initAutocomplete" async defer></script>
+</head>
+<body>
+
+    <button id="openModalBtn">📍 Escolher Endereço</button>
+
+    <!-- Modal de Seleção de Endereço -->
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Onde você quer receber seu pedido?</h2>
+
+            <div class="search-container">
+                <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
+            </div>
+
+            <ul id="suggestions"></ul>
+        </div>
+    </div>
+
+    <!-- Modal para Inserir Número e Complemento -->
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Onde você quer receber seu pedido?</h2>
+    
+            <div class="search-container">
+                <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
+            </div>
+    
+            <ul id="suggestions"></ul>
+    
+            <h3>Endereços Salvos</h3>
+            <ul id="savedAddresses"></ul>
+        </div>
+    </div>
+    
+
+</body>
+</html>
