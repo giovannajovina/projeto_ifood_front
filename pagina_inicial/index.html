@@ -20,7 +20,7 @@
                 <input type="text" placeholder="Busque por item ou loja">
             </div>
             <div class="icons">
-                <span class="location">localização tal</span>
+                <button id="openModalBtn">Escolher Endereço</button>
                 <span class="location-icon" onclick="toggleModal()">📍</span>
                 <span>🛒</span>
             </div>
@@ -30,10 +30,36 @@
             <ul>
                 <li><a href="#">Início</a></li>
                 <li><a href="#">Restaurantes</a></li>
+                <button id="openModalBtn-mobile">Escolher Endereço</button>
             </ul>
         </div>
     </header>
+    <div id="addressModal" class="modal_loc">
+        <div class="modal_loc-content">
+            <span class="close_loc">&times;</span>
+            
+            <!-- Imagem no topo -->
+            <div class="modal-image">
+                <img src="./imagens/logo.png" alt="Localização" />
+            </div>
+            
+            <h2>Onde você quer receber seu pedido?</h2>
     
+            <div class="search-container">
+                <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
+            </div>
+    
+            <ul id="suggestions"></ul>
+    
+            <div class="use-location-btn">
+                <button>Usar minha localização</button>
+            </div>
+    
+            <p class="login-text">
+                Já tem um endereço salvo? <a href="../entrar/index.html" class="login-link">Entrar ou cadastrar</a>
+            </p>
+        </div>
+    </div>
     <div id="sideModal" class="modal">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
         <div class="nome">
@@ -332,7 +358,7 @@
             //     window.location.href = "index.html";
             // });
         </script>
-
+<script src="./index.js"></script>
 </body>
 
 </html>
