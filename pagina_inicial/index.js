@@ -1,5 +1,6 @@
-import config from "../config.js";
+
 document.addEventListener("DOMContentLoaded", function () {
+    
     const closeModal = document.querySelectorAll(".close-loc");
     const addressSearch = document.getElementById("addressSearch");
     const suggestionsList = document.getElementById("suggestions");
@@ -50,7 +51,7 @@ openModalBtn
     }
 
    // 🔥 2. Buscar endereços do usuário e exibi-los
-async function loadSavedAddresses() {
+   async function loadSavedAddresses() {
     const userId = getUserId();
     if (!userId) {
         console.error("Erro: Usuário não encontrado no LocalStorage.");
@@ -63,9 +64,8 @@ async function loadSavedAddresses() {
         return;
     }
 
-
     try {
-        const response = await fetch(`${config.API_BASE_URL}/api/enderecos/user/${userId}`, {
+        const response = await fetch(`${config.API_URL}/api/enderecos/user/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -74,37 +74,38 @@ async function loadSavedAddresses() {
         });
 
         if (!response.ok) {
-            const responseText = await response.text();
-            throw new Error(`Erro na API: ${responseText}`);
+            throw new Error(`Erro na API: ${await response.text()}`);
         }
 
         const responseData = await response.json();
-
-        // Limpa a lista antes de adicionar novos itens
         savedAddressesList.innerHTML = "";
 
-        // Verifica se a API retornou endereços
         if (!responseData.success || responseData.data.length === 0) {
             savedAddressesList.innerHTML = "<p>Nenhum endereço salvo.</p>";
             return;
         }
 
-        // 🔥 Percorre os endereços e adiciona à lista
         responseData.data.forEach(address => {
-            console.log("Adicionando endereço:", address);
-
             const li = document.createElement("li");
             li.innerHTML = `
                 <div class="saved-address">
                     <span><strong>${address.logradouro}, ${address.numero}</strong></span>
                     <p>${address.bairro} - ${address.cidade}, ${address.estado}</p>
+                    <button class="delete-address" data-id="${address.id}">🗑 Excluir</button>
                 </div>
             `;
 
-            // 🔥 Evento de clique para selecionar o endereço
             li.addEventListener("click", () => selectSavedAddress(address));
-
             savedAddressesList.appendChild(li);
+        });
+
+        // Adiciona evento para os botões de exclusão
+        document.querySelectorAll(".delete-address").forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation(); // Evita que o clique no botão selecione o endereço
+                const addressId = event.target.getAttribute("data-id");
+                deleteAddress(addressId);
+            });
         });
 
     } catch (error) {
@@ -316,7 +317,7 @@ async function loadSavedAddresses() {
             return;
         }
 
-        const response = await fetch(`${config.API_BASE_URL}/api/enderecos/save`, {
+        const response = await fetch(`${config.API_URL}/api/enderecos/save`, {
             method: "POST",
             headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
             body: JSON.stringify(selectedAddressData)
@@ -332,6 +333,40 @@ async function loadSavedAddresses() {
             alert("Erro ao salvar.");
         }
     });
+    async function deleteAddress(enderecoId) {
+        const token = localStorage.getItem("token");
+    
+        if (!token) {
+            alert("Você precisa estar logado.");
+            return;
+        }
+    
+        const confirmDelete = confirm("Tem certeza que deseja excluir este endereço?");
+        if (!confirmDelete) return;
+    
+        try {
+            const response = await fetch(`${config.API_URL}/api/enderecos/delete/${enderecoId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            const responseData = await response.json();
+    
+            if (response.ok) {
+                alert("Endereço excluído com sucesso!");
+                loadSavedAddresses(); // Atualiza a lista após exclusão
+            } else {
+                alert(responseData.message || "Erro ao excluir endereço.");
+            }
+    
+        } catch (error) {
+            console.error("Erro ao excluir endereço:", error);
+            alert("Erro ao excluir endereço. Tente novamente.");
+        }
+    }
     
 
     window.initAutocomplete = initAutocomplete;
