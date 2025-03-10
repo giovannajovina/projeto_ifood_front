@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clone iFood</title>
-    <link rel="stylesheet" href="./style.css">
-    <script src="../config.js"></script>
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Clone iFood</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="../config.js"></script>
+        <script src="./index.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkykjH21ut-e8c_F90tJmgO6IX2KvALZ4&libraries=places&callback=initAutocomplete" async defer></script>
 
 </head>
 
@@ -54,12 +56,22 @@
             <ul id="savedAddresses"></ul>
     
             <div class="use-location-btn">
-                <button>Usar minha localização</button>
+                <button id="useMyLocation">Usar minha localização</button>
             </div>
     
             <p class="login-text">
                 Já tem um endereço salvo? <a href="../entrar/index.html" class="login-link">Entrar ou cadastrar</a>
             </p>
+        </div>
+    </div>
+    <div id="addressDetailsModal" class="modal_loc">
+        <div class="modal_loc-content">
+            <span class="close_loc" id="closeAddressDetails">&times;</span>
+            <h2>Confirme os detalhes do endereço</h2>
+            <p id="selectedAddress"></p>
+            <input type="text" id="numero" placeholder="Número">
+            <input type="text" id="complemento" placeholder="Complemento">
+            <button id="saveAddress">Salvar Endereço</button>
         </div>
     </div>
     <div id="sideModal" class="modal">
@@ -360,7 +372,6 @@
             //     window.location.href = "index.html";
             // });
         </script>
-<script src="./index.js"></script>
 </body>
 
 </html>
