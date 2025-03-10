@@ -44,7 +44,7 @@ openModalBtn
 
     // 🔥 1. Pegar o `user_id` do LocalStorage
     function getUserId() {
-        const user = JSON.parse(localStorage.getItem("user_data"));
+        const user = JSON.parse(localStorage.getItem("user"));
         return user ? user.id : null;
     }
 
@@ -55,33 +55,77 @@ openModalBtn
             console.error("Erro: Usuário não encontrado no LocalStorage.");
             return;
         }
-
+    
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("Erro: Token de autenticação não encontrado.");
+            return;
+        }
+    
+        const savedAddressesList = document.getElementById("savedAddresses");
+        if (!savedAddressesList) {
+            console.error("Erro: Elemento 'savedAddresses' não encontrado no DOM.");
+            return;
+        }
+    
         try {
-            const response = await fetch(`https://sua-api.com/enderecos?user_id=${userId}`);
-            if (!response.ok) throw new Error("Erro ao buscar endereços da API.");
-
-            const addresses = await response.json();
-
-            // Limpa a lista antes de adicionar os novos endereços
+            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/user/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            if (!response.ok) {
+                const responseText = await response.text();
+                throw new Error(`Erro na API: ${responseText}`);
+            }
+    
+            const responseData = await response.json();
+            console.log("Resposta da API:", responseData);
+    
+            // 🔥 Transforma em array se não for
+            const addresses = Array.isArray(responseData) ? responseData : [responseData];
+    
             savedAddressesList.innerHTML = "";
-
-            // Exibir os endereços cadastrados
+    
             addresses.forEach(address => {
+                console.log("Adicionando endereço:", address);
+    
+                const logradouro = address.logradouro || "Logradouro desconhecido";
+                const numero = address.numero || "s/n";
+                const bairro = address.bairro || "";
+                const cidade = address.cidade || "";
+                const estado = address.estado || "";
+    
                 const li = document.createElement("li");
                 li.innerHTML = `
                     <div class="saved-address">
-                        <span><strong>${address.logradouro}, ${address.numero}</strong></span>
-                        <p>${address.bairro} - ${address.cidade}, ${address.estado}</p>
+                        <span><strong>${logradouro}, ${numero}</strong></span>
+                        <p>${bairro} - ${cidade}, ${estado}</p>
                     </div>
                 `;
+    
                 li.addEventListener("click", () => selectSavedAddress(address));
                 savedAddressesList.appendChild(li);
             });
-
+    
         } catch (error) {
             console.error("Erro ao carregar endereços:", error);
         }
     }
+    
+    // Chamando a função ao carregar a página
+    window.onload = () => {
+        loadSavedAddresses();
+    };
+    
+    // Chamando a função ao carregar a página
+    window.onload = () => {
+        loadSavedAddresses();
+    };
+    
 
     // 🔥 3. Selecionar um endereço salvo e preencher os campos
     function selectSavedAddress(address) {
