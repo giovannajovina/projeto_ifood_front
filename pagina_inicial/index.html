@@ -110,12 +110,12 @@
 
         async function loadCategories() {
             try {
-                const apiUrl = config.API_URL+"/api/categories/list";
+                const apiUrl = "https://clickfood.shop/api/categories/list";
                 console.log("Buscando categorias em:", apiUrl);
 
                 const response = await fetch(apiUrl, {
                     headers: {
-                        // "bypass-tunnel-reminder": "true"
+                         "Content-Type": "application/json"
                     }
                 });
 

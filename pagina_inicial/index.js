@@ -65,7 +65,7 @@ openModalBtn
     }
 
     try {
-        const response = await fetch(`${config.API_URL}/api/enderecos/user/${userId}`, {
+        const response = await fetch(`https://clickfood.shop/api/enderecos/user/${userId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -317,7 +317,7 @@ openModalBtn
             return;
         }
 
-        const response = await fetch(`${config.API_URL}/api/enderecos/save`, {
+        const response = await fetch(`https://clickfood.shop/api/enderecos/save`, {
             method: "POST",
             headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
             body: JSON.stringify(selectedAddressData)
@@ -345,7 +345,7 @@ openModalBtn
         if (!confirmDelete) return;
     
         try {
-            const response = await fetch(`${config.API_URL}/api/enderecos/delete/${enderecoId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/delete/${enderecoId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
