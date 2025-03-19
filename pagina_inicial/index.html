@@ -74,6 +74,20 @@
             <button id="saveAddress">Salvar Endereço</button>
         </div>
     </div>
+ <!-- Fundo escurecido -->
+<div id="editOverlay" class="modal-overlay"></div>
+
+<!-- Modal de edição -->
+<div id="editAddressModal" class="modal">
+    <span class="close" onclick="closeEditModal()">&times;</span>
+    <h2>Editar Endereço</h2>
+    <p id="editLogradouro"></p>
+    <label>Número:</label>
+    <input type="text" id="editNumero" placeholder="Digite o número">
+    <label>Complemento:</label>
+    <input type="text" id="editComplemento" placeholder="Digite o complemento">
+    <button id="saveEditBtn">Salvar Alterações</button>
+</div>
     <div id="sideModal" class="modal">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
         <div class="nome">
