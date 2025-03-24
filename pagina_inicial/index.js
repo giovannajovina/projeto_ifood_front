@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/user/${userId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/user/${userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -253,8 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        console.log("📍 Endereço recebido do Google:", place);
-
+        
         const addressComponents = place.address_components;
         selectedAddressData = {
             logradouro: "",
@@ -324,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
             async (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
-                console.log("📍 Localização capturada:", latitude, longitude);
+                c
 
                 // 🔥 Buscar o endereço correspondente usando a API do Google Maps
                 await getAddressFromCoordinates(latitude, longitude);
@@ -353,8 +352,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.status !== "OK") {
                 throw new Error("Erro ao obter endereço.");
             }
-
-            console.log("📍 Endereço obtido da API:", data.results[0]);
 
             // 🔥 Criar um objeto `place` manualmente para ser compatível com `showAddressDetails()`
             const place = {
@@ -415,7 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/save`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/save`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -474,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/delete/${enderecoId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/delete/${enderecoId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -539,7 +536,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/update/${addressId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/update/${addressId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -577,3 +574,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.initAutocomplete = initAutocomplete;
 });
+

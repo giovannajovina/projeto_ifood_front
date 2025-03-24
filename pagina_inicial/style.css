@@ -52,6 +52,18 @@ nav ul li a {
     padding: 5px;
     box-shadow: none;
 }
+.search-container input{
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px;
+    box-shadow: none;
+}
+.divisao{
+    display: flex;
+    justify-content: space-evenly;
+    
+}
 .icons {
     display: flex;
     align-items: center;
@@ -91,6 +103,7 @@ nav ul li a {
     font-weight: bold;
     display: block;
 }
+
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -167,6 +180,73 @@ nav ul li a {
 .modal.active {
     display: block;
 }
+.form-wrapper-pessoal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .form-container-pessoal {
+    max-width: 400px;
+    width: 100%;
+    padding: 40px 30px;
+    box-sizing: border-box;
+    text-align: center;
+    margin: auto;
+  }
+
+  .form-container-pessoal h2 {
+    color: #333;
+    margin-bottom: 30px;
+  }
+
+  .form-container-pessoal label {
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 5px;
+  }
+
+  .form-container-pessoal input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .form-buttons-pessoal {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-pessoal {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .btn-voltar-pessoal {
+    background: transparent;
+    color: #d40000;
+    border: 1px solid #d40000;
+  }
+
+  .btn-salvar-pessoal {
+    background: #d40000;
+    color: #fff;
+  }
+
+  .btn-pessoal:hover {
+    opacity: 0.9;
+  }
 @media (max-width: 1200px) {
     .navbar nav, .icons {
         display: none;
@@ -426,8 +506,9 @@ nav ul li a {
 
 .close-btn {
     cursor: pointer;
-    font-size: 20px;
+    font-size: 32px;
     float: right;
+    margin: 15px 40px 0px 0px;
 }
 .icons {
     display: flex;
@@ -538,7 +619,7 @@ nav ul li a {
     background: #f2f2f2;
     padding: 10px;
     border-radius: 10px;
-    margin: 15px 0;
+    margin: 10px 0;
 }
 
 #addressSearch {
@@ -560,7 +641,21 @@ nav ul li a {
     border-radius: 8px;
     width: 100%;
 }
-
+#saveAddress {
+    margin: 5px;
+    background-color: #ff4f5a;
+    color: white;
+    border: none;
+    padding: 8px 8px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 20%;
+}
+.buttons-address{
+    display: flex;
+    justify-content: flex-end;
+}
 .use-location-btn button:hover {
     background-color: #e0434e;
 }
@@ -586,9 +681,9 @@ nav ul li a {
     display: none; /* Oculta por padrão */
     position: fixed;
     z-index: 1000;
-    left: 50%;
+    left: 88%;
     top: 50%;
-    width: 400px; /* Ajuste conforme necessário */
+    width: 300px; /* Ajuste conforme necessário */
     max-width: 90%;
     background: white;
     transform: translate(-50%, -50%);
