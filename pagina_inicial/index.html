@@ -22,7 +22,9 @@
                 <input type="text" placeholder="Busque por item ou loja">
             </div>
             <div class="icons">
-                <button id="openModalBtn">Escolher Endereço</button>
+
+                <button id="openModalBtn"></button>
+                
                 <span class="location-icon" onclick="toggleModal()"><img src="../pagina_inicial/imagens/do-utilizador.png" alt=""></span>
                 <span>🛒</span>
             </div>
@@ -36,11 +38,11 @@
             </ul>
         </div>
     </header>
-    <div id="addressModal" class="modal_loc">
+    <!-- <div id="addressModal" class="modal_loc">
         <div class="modal_loc-content">
             <span class="close_loc">&times;</span>
             
-            <!-- Imagem no topo -->
+            Imagem no topo 
             <div class="modal-image">
                 <img src="./imagens/logo.png" alt="Localização" />
             </div>
@@ -63,8 +65,8 @@
                 Já tem um endereço salvo? <a href="../entrar/index.html" class="login-link">Entrar ou cadastrar</a>
             </p>
         </div>
-    </div>
-    <div id="addressDetailsModal" class="modal_loc">
+    </div> -->
+    <!-- <div id="addressDetailsModal" class="modal_loc">
         <div class="modal_loc-content">
             <span class="close_loc" id="closeAddressDetails">&times;</span>
             <div class="modal-image">
@@ -87,7 +89,60 @@
             <button id="saveAddress">Voltar</button>
             </div>
         </div>
-    </div>
+    </div> -->
+    <div id="addressModal" class="modal_loc">
+        <div class="modal_loc-content">
+          <span class="close_loc">&times;</span>
+      
+          <div class="modal-image">
+            <img src="./imagens/logo.png" alt="Localização" />
+          </div>
+      
+          <h2>Onde você quer receber seu pedido?</h2>
+      
+          <div class="search-container">
+            <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
+          </div>
+      
+          <ul id="suggestions"></ul>
+      
+          <ul id="savedAddresses" class="address-list"></ul>
+      
+          <div class="use-location-btn">
+            <button id="useMyLocation">📍 Usar minha localização atual</button>
+          </div>
+      
+          <p class="login-text">
+            Já tem um endereço salvo? <a href="../entrar/index.html" class="login-link">Entrar ou cadastrar</a>
+          </p>
+        </div>
+      </div>
+      
+      <div id="addressDetailsModal" class="modal_loc">
+        <div class="modal_loc-content">
+          <span class="close_loc" id="closeAddressDetails">&times;</span>
+          <div class="modal-image">
+            <img src="./imagens/logo.png" alt="Localização" />
+          </div>
+          <h2>Confirme os detalhes do endereço</h2>
+          <div class="search-container">
+            <p id="selectedAddress"></p>
+          </div>
+          <div class="divisao">
+            <div class="search-container">
+              <input type="text" id="numero" placeholder="Número">
+            </div>
+            <div class="search-container">
+              <input type="text" id="complemento" placeholder="Complemento">
+            </div>
+          </div>
+          <div class="buttons-address">
+            <button id="saveAddress">Salvar</button>
+            <button id="cancelAddress">Cancelar</button>
+          </div>
+        </div>
+      </div>
+      
  <!-- Fundo escurecido -->
 <div id="editOverlay" class="modal-overlay"></div>
 
@@ -367,14 +422,14 @@
 
         // ];
 
-        const storeList = document.getElementById("store-list");
+        // const storeList = document.getElementById("store-list");
 
-        stores.forEach(store => {
-            const div = document.createElement("div");
-            div.classList.add("store");
-            div.innerHTML = `<img src="${store.image}" alt="${store.name}"><div class="store-info"><strong>${store.name}</strong><span>⭐ ${store.rating} • ${store.category} • ${store.distance}</span><span>${store.time} • ${store.price}</span></div>`;
-            storeList.appendChild(div);
-        });
+        // stores.forEach(store => {
+        //     const div = document.createElement("div");
+        //     div.classList.add("store");
+        //     div.innerHTML = `<img src="${store.image}" alt="${store.name}"><div class="store-info"><strong>${store.name}</strong><span>⭐ ${store.rating} • ${store.category} • ${store.distance}</span><span>${store.time} • ${store.price}</span></div>`;
+        //     storeList.appendChild(div);
+        // });
     </script>
         <script>
             // Verifica se o usuário está autenticado

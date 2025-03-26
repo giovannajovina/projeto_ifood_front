@@ -175,13 +175,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    
+
 
 
 
 
     // Chamando a função ao carregar a página
- 
+
 
 
     // 🔥 3. Selecionar um endereço salvo e preencher os campos
@@ -198,10 +198,15 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("endereco_selecionado", JSON.stringify(address));
 
         console.log("📌 Endereço selecionado salvo no localStorage:", address);
+        atualizarTextoBotaoEndereco();
         buscarLojasProximas()
     }
 
-
+    window.addEventListener("storage", (event) => {
+        if (event.key === "endereco_selecionado") {
+            atualizarTextoBotaoEndereco();
+        }
+    });
 
     // 🔥 . Abrir modal e carregar endereços da API
     openModalBtn.addEventListener("click", () => {
@@ -248,29 +253,46 @@ document.addEventListener("DOMContentLoaded", function () {
     window.onload = () => {
         const user = JSON.parse(localStorage.getItem("user"));
         const token = localStorage.getItem("token");
-    
+
         if (!user || !token) {
             console.warn("⚠️ Usuário não autenticado. Redirecionando...");
             window.location.href = "../login/index.html";
             return;
         }
-    
+
         document.getElementById("nome").textContent = user.nome;
-    
+
         const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
-    
+
         if (!enderecoSelecionado || !enderecoSelecionado.latitude || !enderecoSelecionado.longitude) {
             console.warn("⚠️ Nenhum endereço selecionado. Exibindo modal...");
             document.getElementById("addressModal").style.display = "flex";
             loadSavedAddresses();
             return;
         }
-    
-        // ✅ Usuário autenticado e endereço presente
+
+        atualizarTextoBotaoEndereco();
         loadSavedAddresses();
         buscarLojasProximas();
+        // const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
+        const openModalBtn = document.getElementById("openModalBtn");
+
+        if (openModalBtn) {
+            if (enderecoSelecionado && enderecoSelecionado.logradouro) {
+                openModalBtn.innerText = enderecoSelecionado.logradouro + (enderecoSelecionado.numero ? `, ${enderecoSelecionado.numero}` : "");
+            } else {
+                openModalBtn.innerText = "Escolher Endereço";
+            }
+
+            openModalBtn.addEventListener("click", () => {
+                document.getElementById("addressModal").style.display = "flex";
+                loadSavedAddresses();
+            });
+        }
+
+
     };
-    
+
 
     // 🔥 5. Captura os detalhes do endereço selecionado do Google Places
     function showAddressDetails(place) {
@@ -279,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        
+
         const addressComponents = place.address_components;
         selectedAddressData = {
             logradouro: "",
@@ -312,6 +334,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 selectedAddressData.cep = component.long_name || component.short_name;
             }
         });
+        selectedAddressData.bairro = selectedAddressData.bairro || "Bairro não informado";
+        selectedAddressData.cep = selectedAddressData.cep || "00000-000";
+        selectedAddressData.cidade = selectedAddressData.cidade || "Cidade não informada";
+        selectedAddressData.estado = selectedAddressData.estado || "SP";
         // 🔥 Correção: Captura do CEP com fallback para "short_name"
 
 
@@ -611,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (data.success) {
                 // console.log(data);
-                
+
                 exibirLojasNaTela(data.data);
             } else {
                 alert("Erro ao buscar lojas próximas.");
@@ -652,7 +678,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function atualizarTextoBotaoEndereco() {
+        const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
+        const botaoEndereco = document.getElementById("openModalBtn");
 
+        if (!botaoEndereco) return;
+
+        if (enderecoSelecionado && enderecoSelecionado.logradouro) {
+            const numero = enderecoSelecionado.numero ? `, ${enderecoSelecionado.numero}` : "";
+            botaoEndereco.innerText = `${enderecoSelecionado.logradouro}${numero}`;
+        } else {
+            botaoEndereco.innerText = "Escolher Endereço";
+        }
+    }
 
     window.initAutocomplete = initAutocomplete;
 });
