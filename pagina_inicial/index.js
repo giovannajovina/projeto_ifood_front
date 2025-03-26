@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`https://clickfood.shop/api/enderecos/user/${userId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/user/${userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -175,13 +175,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    
+
 
 
 
     // Chamando a função ao carregar a página
-    window.onload = () => {
-        loadSavedAddresses();
-    };
+ 
 
 
     // 🔥 3. Selecionar um endereço salvo e preencher os campos
@@ -198,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("endereco_selecionado", JSON.stringify(address));
 
         console.log("📌 Endereço selecionado salvo no localStorage:", address);
+        buscarLojasProximas()
     }
 
 
@@ -244,7 +245,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Chamar initAutocomplete() quando o script do Google carregar
     window.initAutocomplete = initAutocomplete;
-
+    window.onload = () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+    
+        if (!user || !token) {
+            console.warn("⚠️ Usuário não autenticado. Redirecionando...");
+            window.location.href = "../login/index.html";
+            return;
+        }
+    
+        document.getElementById("nome").textContent = user.nome;
+    
+        const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
+    
+        if (!enderecoSelecionado || !enderecoSelecionado.latitude || !enderecoSelecionado.longitude) {
+            console.warn("⚠️ Nenhum endereço selecionado. Exibindo modal...");
+            document.getElementById("addressModal").style.display = "flex";
+            loadSavedAddresses();
+            return;
+        }
+    
+        // ✅ Usuário autenticado e endereço presente
+        loadSavedAddresses();
+        buscarLojasProximas();
+    };
+    
 
     // 🔥 5. Captura os detalhes do endereço selecionado do Google Places
     function showAddressDetails(place) {
@@ -412,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`https://clickfood.shop/api/enderecos/save`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/save`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -471,7 +497,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`https://clickfood.shop/api/enderecos/delete/${enderecoId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/delete/${enderecoId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -536,7 +562,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`https://clickfood.shop/api/enderecos/update/${addressId}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/update/${addressId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -570,6 +596,62 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Erro ao atualizar endereço. Verifique sua conexão.");
         }
     }
+    async function buscarLojasProximas() {
+        // const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
+        const enderecoSelecionado = JSON.parse(localStorage.getItem("endereco_selecionado"));
+        console.log("📍 Endereço selecionado:", enderecoSelecionado);
+        if (!enderecoSelecionado || !enderecoSelecionado.latitude || !enderecoSelecionado.longitude) {
+            console.error("Endereço selecionado inválido.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/lojas/proximas?latitude=${enderecoSelecionado.latitude}&longitude=${enderecoSelecionado.longitude}`);
+            const data = await response.json();
+
+            if (data.success) {
+                // console.log(data);
+                
+                exibirLojasNaTela(data.data);
+            } else {
+                alert("Erro ao buscar lojas próximas.");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar lojas:", error);
+        }
+    }
+
+    function exibirLojasNaTela(lojas) {
+        const storeList = document.getElementById("store-list");
+        storeList.innerHTML = "";
+
+        lojas.forEach(item => {
+            const loja = item.loja;
+            const div = document.createElement("div");
+            div.classList.add("store");
+            // div.innerHTML = `
+            //     <img src="${loja.logo}" alt="${loja.nome_fantasia}">
+            //     <div class="store-info">
+            //         <strong>${loja.nome_fantasia}</strong>
+            //         <span>${item.distancia_km} km</span>
+            //     </div>
+            // `;
+            div.innerHTML = `<img src="${loja.logo}" alt="${loja.nome_fantasia}">
+                            <div class="store-info">
+                                <strong>
+                                    ${loja.nome_fantasia}
+                                </strong>
+                                <span>
+                                    ⭐ ${'4.9'} • ${'Brasileira'} • ${item.distancia_km}km
+                                </span>
+                                <span>
+                                ${'store.time'} • ${'store.price'}
+                                </span>
+                            </div>`;
+            storeList.appendChild(div);
+        });
+    }
+
 
 
     window.initAutocomplete = initAutocomplete;
