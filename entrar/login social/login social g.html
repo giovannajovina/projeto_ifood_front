@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Social Google</title>
+</head>
+<body>
+  <h1>Login Social</h1>
+
+  <div id="g-signin2"></div>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script>
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init({
+          client_id: 'SUA_CLIENT_ID_GOOGLE' // colocar o Client ID do Google, pgt prof
+        });
+      });
+    }
+
+    <button onclick="onLoad()">Login com google</button>
+
+    // ação do login
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log("Nome: " + profile.getName());
+      console.log("Email: " + profile.getEmail());
+    }
+  </script>
+
+  <script>
+    // dowload da api
+    window.onload = function() {
+      onLoad();
+    }
+  </script>
+
+  <script>
+    gapi.signin2.render('g-signin2', {
+      'scope': 'profile email',
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': onSignIn
+    });
+  </script>
+</body>
+</html>
