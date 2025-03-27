@@ -17,12 +17,12 @@
     function onLoad() {
       gapi.load('auth2', function() {
         gapi.auth2.init({
-          client_id: 'SUA_CLIENT_ID_GOOGLE' // colocar o Client ID do Google
+          client_id: 'SUA_CLIENT_ID_GOOGLE' // colocar o Client ID do Google, precisa entender melhor a versão gratuita
         });
       });
     }
 
-    // Ação ao fazer login com Google
+   
     function onSignIn(googleUser) {
       var profile = googleUser.getBasicProfile();
       console.log("Nome: " + profile.getName());
