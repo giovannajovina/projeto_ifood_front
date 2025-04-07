@@ -1,0 +1,283 @@
+.produtos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: flex-start;
+}
+
+.produto-card {
+    width: 220px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background-color: #fff;
+    transition: transform 0.2s;
+}
+
+.produto-card:hover {
+    transform: translateY(-5px);
+}
+
+.produto-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.cabecalho-loja {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.logo-loja {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+}
+
+.info-loja h2 {
+    font-size: 22px;
+    margin: 0;
+}
+
+.avaliacao-loja {
+    font-size: 14px;
+    color: #f8a403;
+}
+
+.ver-mais {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+.modal-lateral {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: right 0.3s ease-in-out;
+    padding: 20px;
+}
+
+.modal-lateral.ativo {
+    right: 0;
+}
+
+.fechar {
+    font-size: 24px;
+    cursor: pointer;
+    float: right;
+}
+
+.abas {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    gap: 20px;
+    margin-top: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.abas li {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.abas li.ativo {
+    font-weight: bold;
+    border-bottom: 2px solid red;
+}
+
+.aba-conteudo {
+    display: none;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.aba-conteudo.ativo {
+    display: block;
+}
+.modal-produto {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-produto.ativo {
+    display: flex;
+  }
+  
+  .conteudo-modal-produto {
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .fechar-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  
+  .info-produto {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .info-produto img {
+    width: 250px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .dados {
+    flex: 1;
+  }
+  
+  .loja-info {
+    margin-top: 10px;
+    color: #777;
+    font-size: 14px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+    resize: none;
+  }
+  
+  .acoes {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .quantidade button {
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .quantidade span {
+    margin: 0 10px;
+    font-size: 18px;
+  }
+  
+  #btn-adicionar {
+    background: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .carrinho-icone {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background: red;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 500;
+  }
+  .carrinho-lateral {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 360px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    transition: right 0.3s ease-in-out;
+    padding: 25px;
+    overflow-y: auto;
+  }
+  
+  .carrinho-lateral.ativo {
+    right: 0;
+  }
+  
+  .conteudo-carrinho .fechar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  #itens-carrinho {
+    margin: 20px 0;
+  }
+  
+  #itens-carrinho p {
+    font-weight: 500;
+    margin: 8px 0 4px;
+  }
+  
+  #itens-carrinho small {
+    color: #666;
+    font-size: 13px;
+  }
+  
+  #resumo-carrinho {
+    font-size: 14px;
+  }
+  
+  #resumo-carrinho p {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+  }
+  
+  #resumo-carrinho .total {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  #resumo-carrinho button {
+    width: 100%;
+    background: red;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+      

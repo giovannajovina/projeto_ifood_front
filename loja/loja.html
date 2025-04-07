@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Loja - iFood Clone</title>
+    <link rel="stylesheet" href="./loja.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">iFood Clone</div>
+    </header>
+    <div class="carrinho-icone" onclick="abrirCarrinho()">
+        🛒 <span id="qtd-carrinho">0</span>
+    </div>
+
+    <main>
+        <section class="cabecalho-loja">
+            <img id="logo-loja" src="" alt="Logo da loja" class="logo-loja">
+            <div class="info-loja">
+                <h2 id="nome-loja">Nome da Loja</h2>
+                <div class="avaliacao-loja">
+                    ⭐ <span id="nota-loja">4.5</span>
+                </div>
+            </div>
+            <button id="btn-ver-mais" style="color: red; background: none; border: none; cursor: pointer;">Ver
+                mais</button>
+            <!-- modal lateral do ver mais da loja -->
+            <div id="modal-detalhes-loja" class="modal-lateral">
+                <div class="conteudo-modal">
+                    <span class="fechar" onclick="fecharModal()">×</span>
+                    <ul class="abas">
+                        <li class="ativo" onclick="mudarAba('sobre')">Sobre</li>
+                        <li onclick="mudarAba('horario')">Horário</li>
+                        <li onclick="mudarAba('pagamento')">Pagamento</li>
+                    </ul>
+                    <div id="aba-sobre" class="aba-conteudo ativo"></div>
+                    <div id="aba-horario" class="aba-conteudo">Horário de funcionamento: <br>Seg a Dom: 11h às 23h</div>
+                    <div id="aba-pagamento" class="aba-conteudo">Aceita Pix, Mastercard, Visa, Elo</div>
+                </div>
+            </div>
+            <!--  -->
+
+        </section>
+
+
+        <section class="produtos" id="produtos-destaque"></section>
+    </main>
+
+    <script src="./loja.js"></script>
+    <!-- modal produto -->
+    <div id="modal-produto" class="modal-produto">
+        <div class="conteudo-modal-produto">
+            <span class="fechar-modal" onclick="fecharModalProduto()">×</span>
+            <div class="info-produto">
+                <img id="modal-img-produto" src="" alt="Imagem do produto">
+                <div class="dados">
+                    <h2 id="modal-nome-produto"></h2>
+                    <p id="modal-descricao-produto"></p>
+                    <strong id="modal-preco-produto"></strong>
+
+                    <div class="loja-info">
+                        <span id="modal-loja-nome"></span>
+                        <span id="modal-loja-avaliacao"></span>
+                    </div>
+
+                    <label for="comentario">Algum comentário?</label>
+                    <textarea id="comentario" placeholder="Ex: tirar cebola, maionese à parte etc."></textarea>
+
+                    <div class="acoes">
+                        <div class="quantidade">
+                            <button onclick="alterarQuantidade(-1)">−</button>
+                            <span id="quantidade-produto">1</span>
+                            <button onclick="alterarQuantidade(1)">+</button>
+                        </div>
+                        <button id="btn-adicionar">Adicionar <span id="modal-total-produto"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <!-- modal carrinho -->
+    <div id="modal-carrinho" class="carrinho-lateral">
+        <div class="conteudo-carrinho">
+          <span class="fechar" onclick="fecharCarrinho()">×</span>
+      
+          <h4>Seu pedido em</h4>
+          <h3 id="loja-carrinho">Nome da Loja</h3>
+          <a href="#" style="color: red; font-size: 14px;"onclick="fecharCarrinho()">Ver Cardápio</a>
+      
+          <div id="itens-carrinho"></div>
+      
+          <div id="resumo-carrinho">
+            <p>Subtotal <span id="subtotal-carrinho">R$ 0,00</span></p>
+            <p>Taxa de Serviço <span>R$ 0,99</span></p>
+            <p>Taxa de Entrega <span>R$ 10,99</span></p>
+            <hr>
+            <p class="total">Total <span id="total-carrinho">R$ 0,00</span></p>
+            <button onclick="finalizarPedido()">Escolher forma de pagamento</button>
+          </div>
+        </div>
+      </div>
+      
+
+
+</body>
+
+</html>
