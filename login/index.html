@@ -69,10 +69,16 @@
             cursor: pointer;
         }
         .link {
-            display: block;
+            /* display: flex; */
             margin-top: 20px;
             text-decoration: none;
             color: #1877f2;
+        }
+        .botoes {
+            width: 100%;
+            display: flex;
+            justify-content:space-between;
+            margin-top: 10px;
         }
         @media (max-width: 766px) {
             body{
@@ -97,6 +103,12 @@
                 margin-top: 30px;
             }
         }
+        @media(max-width: 475px) {
+            .botoes {
+                display: contents;
+        }
+
+        }
     </style>
 </head>
 <body>
@@ -111,7 +123,11 @@
                 <input type="password" id="password" placeholder="Senha" required>
                 <button type="submit" class="btn">Entrar</button>
             </form>
-            <a href="./recuperacao_senha/index.html" class="link">Esqueci minha senha</a>
+            <div class="botoes">
+
+                <a href="./recuperacao_senha/index.html" class="link">Esqueci minha senha</a>
+                <a href="../cadastro users/index.html" class="link">Criar conta</a>
+            </div>
         </div>
     </div>
     <script src="../config.js"></script>
