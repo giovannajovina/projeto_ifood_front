@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Finalizar Pedido</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo" height="50">
+  </header>
+
+  <main class="checkout">
+    <h1>Finalize seu pedido</h1>
+
+    <section class="entrega">
+      <h2>Entrega</h2>
+      <p id="endereco-entrega">Carregando endereço...</p>
+    </section>
+
+    <section class="horario">
+      <h2>Hoje, 50-60 min</h2>
+      <p>R$ <span id="valor-entrega">10.99</span></p>
+    </section>
+
+    <section class="pagamento">
+      <h2>Pague pelo site</h2>
+      <div>
+        <label>
+          <input type="radio" name="forma_pagamento" value="pix" checked> Pix
+        </label>
+        <label>
+          <input type="radio" name="forma_pagamento" value="cartao"> Cartão
+        </label>
+      </div>
+    </section>
+
+    <section class="cpf">
+      <label for="cpf">CPF/CNPJ na nota:</label>
+      <input type="text" id="cpf" placeholder="Carregando CPF...">
+    </section>
+
+    <button id="btn-finalizar">Fazer pedido</button>
+  </main>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
