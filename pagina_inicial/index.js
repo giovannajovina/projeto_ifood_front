@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/user/${userId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/user/${userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/save`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/save`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/delete/${enderecoId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/delete/${enderecoId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`http://127.0.0.1:8000/api/enderecos/update/${addressId}`, {
+            const response = await fetch(`https://clickfood.shop/api/enderecos/update/${addressId}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -632,7 +632,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/lojas/proximas?latitude=${enderecoSelecionado.latitude}&longitude=${enderecoSelecionado.longitude}`);
+            const response = await fetch(`https://clickfood.shop/api/lojas/proximas?latitude=${enderecoSelecionado.latitude}&longitude=${enderecoSelecionado.longitude}`);
             const data = await response.json();
 
             if (data.success) {
@@ -675,6 +675,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </span>
                             </div>`;
             storeList.appendChild(div);
+            div.addEventListener("click", () => {
+                localStorage.setItem("loja_id", loja.id); // Salva o ID da loja
+                window.location.href = "../loja/loja.html"; // Redireciona para nova página
+            });
         });
     }
 

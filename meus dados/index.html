@@ -165,7 +165,7 @@
       console.log(userId);
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/usuario/list/${userId}`); 
+        const response = await fetch(`https://clickfood.shop/api/usuario/list/${userId}`); 
         console.log(response)
         if (!response.ok) throw new Error('Erro ao buscar dados do usuário');
 
@@ -195,7 +195,7 @@
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/usuario/update/${userId}`, {
+        const response = await fetch(`https://clickfood.shop/api/usuario/update/${userId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
