@@ -180,6 +180,7 @@
                     if (status === 200 || status === 201) {
                         alert("Cadastro realizado com sucesso!");
                         console.log(body);
+                        window.location.href = '../login/index.html';
                     } else if (status === 422) {
                         // Mostra os erros de validação
                         let errorMessage = "Erro ao cadastrar:\n";
