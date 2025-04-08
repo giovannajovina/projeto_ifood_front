@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escolher forma de pagamento</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <header>
+    <img src="/assets/ifood-logo.png" alt="Logo iFood" class="logo">
+  </header>
+
+  <main class="container">
+    <h2>Escolha um meio de pagamento</h2>
+
+    <div class="payment-options">
+      <button onclick="escolherPagamento('credito')">
+        <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" alt="Crédito">
+        Crédito
+      </button>
+      <button onclick="escolherPagamento('debito')">
+        <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" alt="Débito">
+        Débito
+      </button>
+      <!-- <button onclick="escolherPagamento('vale-refeicao')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2716/2716757.png" alt="Vale-refeição">
+        Vale-refeição
+      </button>
+      <button onclick="escolherPagamento('vale-alimentacao')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3144/3144469.png" alt="Vale-alimentação">
+        Vale-alimentação
+      </button> -->
+    </div>
+  </main>
+
+  <script src="./index.js"></script>
+</body>
+</html>
