@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Cartão</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <header>
+    <img src="/assets/ifood-logo.png" alt="Logo iFood" class="logo">
+  </header>
+
+  <main class="container">
+    <h2 id="titulo-cartao">Adicionar novo cartão</h2>
+    <form id="formCartao">
+      <label>Número do cartão</label>
+      <input type="text" placeholder="0000 0000 0000 0000" required>
+
+      <label>Nome impresso no cartão</label>
+      <input type="text" placeholder="Nome completo" required>
+
+      <div class="linha-cartao">
+        <div>
+          <label>Validade</label>
+          <input type="text" placeholder="MM/AA" required>
+        </div>
+        <div>
+          <label>CVV</label>
+          <input type="text" placeholder="123" required>
+        </div>
+      </div>
+
+      <label>Apelido do cartão</label>
+      <input type="text" placeholder="Ex: Cartão pessoal">
+
+      <label>CPF/CNPJ do titular</label>
+      <input type="text" placeholder="000.000.000-00">
+
+      <button type="submit">Salvar cartão</button>
+    </form>
+  </main>
+
+  <script src="./index.js"></script>
+</body>
+</html>
