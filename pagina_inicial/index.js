@@ -1,5 +1,5 @@
 
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("headerLoaded", function () {
     // if (typeof google !== "undefined" && google.maps) {
     //     initAutocomplete();
     // } else {
@@ -677,7 +677,7 @@ document.addEventListener("DOMContentLoaded", function () {
             storeList.appendChild(div);
             div.addEventListener("click", () => {
                 localStorage.setItem("loja_id", loja.id); // Salva o ID da loja
-                window.location.href = "../loja/loja.html"; // Redireciona para nova página
+                window.location.href = "/loja/loja.html"; // Redireciona para nova página
             });
         });
     }
@@ -698,4 +698,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.initAutocomplete = initAutocomplete;
 });
+window.toggleModal = function () {
+    const modal = document.getElementById('sideModal');
+    if (modal) {
+        modal.classList.toggle('active');
+    } else {
+        console.warn("⚠️ #sideModal não encontrado.");
+    }
+};
+
+window.toggleMenu = function () {
+    const nav = document.getElementById('mobileNav');
+    if (nav) {
+        nav.classList.toggle('active');
+    } else {
+        console.warn("⚠️ #mobileNav não encontrado.");
+    }
+};
 
