@@ -1,6 +1,5 @@
 
 window.addEventListener("headerLoaded", function () {
-
     // if (typeof google !== "undefined" && google.maps) {
     //     initAutocomplete();
     // } else {
@@ -15,9 +14,7 @@ window.addEventListener("headerLoaded", function () {
     const modal = document.getElementById("addressModal");
     const closeModalBtn = document.querySelector(".close_loc");
     const openModalBtn = document.getElementById("openModalBtn");
-    const openModalBtnMenu = document.getElementById("openModalBtnMenu");
     const openModalBtn_mobile = document.getElementById("openModalBtn-mobile");
-    atualizarTextoBotaoEndereco(); // <-- chama logo após pegar o botão
     let savedAddresses = []; // Array global para armazenar os endereços carregados
     openModalBtn
     // Verifica se o botão existe antes de adicionar o evento
@@ -34,13 +31,6 @@ window.addEventListener("headerLoaded", function () {
         });
     } else {
         console.warn("⚠️ Botão #openModalBtn_mobile não encontrado no DOM.");
-    }
-    if (openModalBtnMenu) {
-        openModalBtnMenu.addEventListener("click", () => {
-            modal.style.display = "flex";
-        });
-    } else {
-        console.warn("⚠️ Botão #openModalBtnMenu não encontrado no DOM.");
     }
 
     // Verifica se o botão de fechar existe
@@ -116,9 +106,9 @@ window.addEventListener("headerLoaded", function () {
                         <span><strong>${address.logradouro}, ${address.numero}</strong></span>
                         <p>${address.bairro} - ${address.cidade}, ${address.estado}</p>
                     </div>
+                    <button class="delete-address" data-id="${address.id}">🗑 Excluir</button>
                     <button class="edit-address-btn" data-id="${address.id}">📝 Editar</button>
-                <button class="delete-address" data-id="${address.id}">🗑 Excluir</button>
-                    `;
+                `;
 
                 // Se o endereço do localStorage for o mesmo, adiciona a classe "selected-address"
                 if (enderecoSelecionado && enderecoSelecionado.id === address.id) {
@@ -224,10 +214,6 @@ window.addEventListener("headerLoaded", function () {
         loadSavedAddresses(); // Busca os endereços cadastrados
     });
     openModalBtn_mobile.addEventListener("click", () => {
-        modal.style.display = "flex";
-        loadSavedAddresses(); // Busca os endereços cadastrados
-    }); 
-    openModalBtnMenu.addEventListener("click", () => {
         modal.style.display = "flex";
         loadSavedAddresses(); // Busca os endereços cadastrados
     });
