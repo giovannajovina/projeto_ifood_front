@@ -695,8 +695,22 @@ window.addEventListener("headerLoaded", function () {
             botaoEndereco.innerText = "Escolher Endereço";
         }
     }
+    function preencherNomeUsuario() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.nome) return;
+      
+        const nomeElement = document.getElementById("nome");
+        if (nomeElement) {
+          nomeElement.textContent = user.nome;
+        } else {
+          console.warn("⚠️ Elemento #nome não encontrado no DOM.");
+        }
+      }
 
     window.initAutocomplete = initAutocomplete;
+    atualizarTextoBotaoEndereco(); 
+    preencherNomeUsuario();
+
 });
 window.toggleModal = function () {
     const modal = document.getElementById('sideModal');
@@ -715,4 +729,6 @@ window.toggleMenu = function () {
         console.warn("⚠️ #mobileNav não encontrado.");
     }
 };
+
+  
 
