@@ -710,6 +710,7 @@ window.addEventListener("headerLoaded", function () {
     window.initAutocomplete = initAutocomplete;
     atualizarTextoBotaoEndereco(); 
     preencherNomeUsuario();
+    buscarLojasProximas()
 
 });
 window.toggleModal = function () {
