@@ -1,4 +1,10 @@
 /* Reset básico */
+header.force-style {
+    background-color: limegreen !important;
+    border: 5px solid orange !important;
+  }
+  
+  
 * {
     margin: 0;
     padding: 0;
