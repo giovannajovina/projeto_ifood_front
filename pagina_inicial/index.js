@@ -15,6 +15,7 @@ window.addEventListener("headerLoaded", function () {
     const closeModalBtn = document.querySelector(".close_loc");
     const openModalBtn = document.getElementById("openModalBtn");
     const openModalBtn_mobile = document.getElementById("openModalBtn-mobile");
+    const openModalBtnMenu = document.getElementById("openModalBtnMenu");
     let savedAddresses = []; // Array global para armazenar os endereços carregados
     openModalBtn
     // Verifica se o botão existe antes de adicionar o evento
@@ -31,6 +32,13 @@ window.addEventListener("headerLoaded", function () {
         });
     } else {
         console.warn("⚠️ Botão #openModalBtn_mobile não encontrado no DOM.");
+    }
+    if (openModalBtnMenu) {
+        openModalBtnMenu.addEventListener("click", () => {
+            modal.style.display = "flex";
+        });
+    } else {
+        console.warn("⚠️ Botão #openModalBtnMenu não encontrado no DOM.");
     }
 
     // Verifica se o botão de fechar existe
@@ -214,6 +222,10 @@ window.addEventListener("headerLoaded", function () {
         loadSavedAddresses(); // Busca os endereços cadastrados
     });
     openModalBtn_mobile.addEventListener("click", () => {
+        modal.style.display = "flex";
+        loadSavedAddresses(); // Busca os endereços cadastrados
+    });
+    openModalBtnMenu.addEventListener("click", () => {
         modal.style.display = "flex";
         loadSavedAddresses(); // Busca os endereços cadastrados
     });
@@ -695,10 +707,22 @@ window.addEventListener("headerLoaded", function () {
             botaoEndereco.innerText = "Escolher Endereço";
         }
     }
+    function preencherNomeUsuario() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.nome) return;
+      
+        const nomeElement = document.getElementById("nome");
+        if (nomeElement) {
+          nomeElement.textContent = user.nome;
+        } else {
+          console.warn("⚠️ Elemento #nome não encontrado no DOM.");
+        }
+      }
 
     window.initAutocomplete = initAutocomplete;
     atualizarTextoBotaoEndereco(); 
     preencherNomeUsuario();
+    buscarLojasProximas()
 
 });
 window.toggleModal = function () {
