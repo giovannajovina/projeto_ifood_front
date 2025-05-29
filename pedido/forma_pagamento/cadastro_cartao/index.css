@@ -65,4 +65,134 @@ body {
   button[type="submit"]:hover {
     background-color: #c21818;
   }
-  
+  .input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    max-width: 400px;
+}
+
+#numero-cartao {
+    border: none;
+    flex-grow: 1;
+    font-size: 16px;
+    outline: none;
+    padding: 5px;
+}
+
+.icone-bandeira {
+    width: 32px;
+    height: 20px;
+    margin-left: 8px;
+}
+/* Estilo padrão do input */
+input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Estilo quando está válido */
+.input-valido {
+  border: 2px solid green !important;
+}
+
+/* Estilo quando está inválido */
+.input-invalido {
+  border: 2px solid red !important;
+}
+/* Estilização geral */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9f9;
+}
+
+header {
+  /* background-color: #FF2D55; */
+  text-align: center;
+  padding: 15px;
+}
+
+header img {
+  width: 120px;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+#bandeira-cartao {
+  position: absolute;
+  right: 10px;
+  width: 35px;
+  height: auto;
+}
+
+.linha-cartao {
+  display: flex;
+  gap: 10px;
+}
+
+.linha-cartao .form-group {
+  flex: 1;
+}
+
+.btn-submit {
+  background-color: #FF2D55;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #e6224a;
+}
+

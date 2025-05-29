@@ -1,84 +1,163 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const endereco = JSON.parse(localStorage.getItem("endereco_selecionado"));
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.id;
-    
-    
-  
-    // 1. Endereço do localStorage
-    if (endereco) {
-      document.getElementById("endereco-entrega").innerText =
-        `${endereco.logradouro}, ${endereco.numero} - ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`;
-    } else {
-      document.getElementById("endereco-entrega").innerText = "Endereço não encontrado.";
-    }
-  
-    // 2. Buscar CPF do usuário pela API
-    try {
-      const response = await fetch(`https://clickfood.shop/api/usuario/list/${userId}`);
-      let data = await response.json();
-      let dataU=data[0]
-      console.log(dataU.cpf);
-      
-  
-      const inputCpf = document.getElementById("cpf");
-      if (dataU?.cpf) {
-        inputCpf.value = dataU.cpf;
-      } else {
-        inputCpf.placeholder = "Informe o CPF manualmente";
-      }
-    } catch (e) {
-      console.error("Erro ao buscar CPF do usuário:", e);
-    }
-  
-    // (opcional) evento para botão "Fazer pedido"
-    document.getElementById("btn-finalizar").addEventListener("click", () => {
-      alert("Pedido pronto para ser enviado com os dados acima!");
-    });
+  const endereco = JSON.parse(localStorage.getItem("endereco_selecionado"));
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
 
-    
-    const token = localStorage.getItem("token");
+
+  //nome da loja
+  loja = JSON.parse(localStorage.getItem("detalhes_loja"))
+  const lojaItens = document.getElementById("loja-carrinho");
+  lojaItens.innerHTML = "";
+  lojaItens.innerHTML = loja.nome_fantasia;
+
+  //subtotal e total
+  taxaServico = 0.99;
+  taxaEntrega = 5.99;
+
+  const subtotalElement = document.getElementById("subtotal-carrinho");
+  subtotalLocalStorge = localStorage.getItem("subtotal")
+  const subtotalNumerico = parseFloat(subtotalLocalStorge.replace(",", "."));
+  subtotalElement.innerText = `R$ ${subtotalNumerico.toFixed(2)}`;
+
+  const totalElement = document.getElementById("total-carrinho");
+  const total = subtotalNumerico + taxaServico + taxaEntrega;
+  totalElement.innerText = `R$ ${total.toFixed(2)}`;
+
+
+  //montar itens carrinho
+
+  // Recuperar os dados do localStorage
+  const resumoCarrinho = JSON.parse(localStorage.getItem('resumoCarrinho'));
+
+  // Seleciona o container HTML
+  containerItens = document.getElementById('itens-carrinho');
+  containerItens.innerHTML = "";
+
+  // Exibir os itens
+  resumoCarrinho.itens.forEach(item => {
+    const itemElement = document.createElement('div');
+    itemElement.innerHTML = `
+        <p>${item.quantidade}x ${item.nome}  - R$${item.total.toFixed(2)}</p>
+    `;
+    containerItens.appendChild(itemElement);
+  });
+
+
+  // 1. Endereço do localStorage
+  if (endereco) {
+    document.getElementById("endereco-entrega").innerText =
+      `${endereco.logradouro}, ${endereco.numero} - ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}`;
+  } else {
+    document.getElementById("endereco-entrega").innerText = "Endereço não encontrado.";
+  }
+
+  // 2. Buscar CPF do usuário pela API
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/usuario/list/${userId}`);
+    let data = await response.json();
+    let dataU = data[0]
+    console.log(dataU.cpf);
+
+
+    const inputCpf = document.getElementById("cpf");
+    if (dataU?.cpf) {
+      inputCpf.value = dataU.cpf;
+    } else {
+      inputCpf.placeholder = "Informe o CPF manualmente";
+    }
+  } catch (e) {
+    console.error("Erro ao buscar CPF do usuário:", e);
+  }
+
+  // (opcional) evento para botão "Fazer pedido"
+  document.getElementById("btn-finalizar").addEventListener("click", () => {
+    alert("Pedido pronto para ser enviado com os dados acima!");
+  });
+
+
+  const token = localStorage.getItem("token");
   const container = document.getElementById("cartao-container");
   const btnAdd = document.getElementById("btn-adicionar-cartao");
 
-  try {
-    const response = await fetch("http://localhost:8000/api/cartao", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  // Recupera o ID e tipo do cartão salvos na sessão
+  const cartaoId = sessionStorage.getItem('cartao_id');
+  const tipoCartao = sessionStorage.getItem('tipo_cartao');
 
-    const cartoes = await response.json();
-
-    if (cartoes.length > 0) {
-      const cartao = cartoes[0]; // Pegamos o primeiro
-
-      container.innerHTML = `
-        <div class="cartao-item">
-          <img src="https://img.icons8.com/color/48/000000/mastercard.png" width="32" />
-          <div>
-            <strong>${cartao.nome} • ${cartao.bandeira}</strong><br>
-            .... ${cartao.ultimos_digitos}
-          </div>
-          <div class="icones">
-            <button class="icon-btn" onclick="editarCartao(${cartao.id})">
-              ✏️
-            </button>
-            <button class="icon-btn" onclick="deletarCartao(${cartao.id})">
-              🗑️
-            </button>
-          </div>
-        </div>
-      `;
-
-      // Esconde o botão adicionar
-      btnAdd.style.display = "none";
-    } else {
-      container.innerHTML = "";
-      btnAdd.style.display = "block";
-    }
-  } catch (e) {
-    console.error("Erro ao carregar cartão:", e);
-    container.innerHTML = "<p>Erro ao carregar dados do cartão</p>";
+  if (cartaoId && tipoCartao) {
+    // Exibe as informações na tela
+    container.innerHTML = `
+              <p>Cartão selecionado: ${tipoCartao.charAt(0).toUpperCase() + tipoCartao.slice(1)}</p>
+              <p>ID do Cartão: ${cartaoId}</p>
+          `;
+  } else {
+    container.innerText = 'Nenhum cartão selecionado.';
   }
 
-  });
-  
+ 
+
+
+  exibirCartoes();
+});
+ async function exibirCartoes() {
+    const token = localStorage.getItem("token");
+    const container = document.getElementById("cartao-container");
+    const btnAdd = document.getElementById("btn-adicionar-cartao");
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/cartao/list", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const cartoes = await response.json();
+      const selecionadoId = localStorage.getItem("cartao_id");
+
+      container.innerHTML = "";
+
+      if (cartoes.length > 0) {
+        cartoes.forEach(cartao => {
+          const isSelecionado = cartao.id == selecionadoId;
+
+          const item = document.createElement("div");
+          item.classList.add("cartao-item");
+          item.style = `
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border: 2px solid ${isSelecionado ? '#EA1D2C' : '#ccc'};
+          background-color: ${isSelecionado ? '#fff4f4' : '#fff'};
+          padding: 12px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+        `;
+
+          item.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://img.icons8.com/color/48/000000/${cartao.bandeira === 'visa' ? 'visa' : 'mastercard'}-logo.png" width="30" alt="Bandeira">
+            <div>
+              <strong>${cartao.apelido || 'Cartão'} • ${cartao.bandeira}</strong><br>
+              .... ${cartao.ultimos_digitos}
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="selecionarCartao(${cartao.id}, '${cartao.tipo}')" title="Selecionar">✅</button>
+            <button onclick="editarCartao(${cartao.id})" title="Editar">✏️</button>
+            <button onclick="deletarCartao(${cartao.id})" title="Excluir">🗑️</button>
+          </div>
+        `;
+          container.appendChild(item);
+        });
+      } else {
+        container.innerHTML = "<p>Nenhum cartão cadastrado.</p>";
+      }
+
+      btnAdd.style.display = "block";
+    } catch (e) {
+      console.error("Erro ao carregar cartões:", e);
+      container.innerHTML = "<p>Erro ao carregar dados do cartão</p>";
+    }
+  }
+window.selecionarCartao = function (id, tipo) {
+  localStorage.setItem("cartao_id", id);
+  localStorage.setItem("tipo_cartao", tipo);
+  exibirCartoes(); // atualiza sem reload
+};

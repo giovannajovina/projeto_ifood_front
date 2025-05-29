@@ -61,7 +61,7 @@
 
             <section class="horario">
                 <h3>Hoje, 50-60 min</h3>
-                <p>R$ <span id="valor-entrega">10.99</span></p>
+                <p>R$ <span id="valor-entrega">5.99</span></p>
             </section>
 
             <section class="pagamento">
@@ -86,11 +86,18 @@
                         <div>
                             <h4>Adicione um cartão no iFood</h4>
                             <p>É prático, seguro e você não perde nenhum minuto a mais quando seu pedido chegar.</p>
-                            <button id="btn-adicionar-cartao" class="btn btn-outline">Adicionar novo cartão</button>
+                            <button id="btn-adicionar-cartao" class="btn btn-outline">
+                                <a href="../forma_pagamento/index.html">
+                                    Adicionar novo cartão
+                                </a>
+                            
+                            </button>
                         </div>
                         <img src="https://static.ifood-static.com.br/image/upload/f_auto/webapp/checkout/payment-method-card.png"
                             alt="Ilustração segurando cartão" width="130">
                     </div>
+                    <div id="cartao-container" style="margin-top: 15px;"></div>
+
 
                     <div class="cpf-toggle">
                         <label class="cpf-label">CPF/CNPJ na nota</label>
@@ -129,7 +136,7 @@
             <div id="resumo-carrinho">
                 <p>Subtotal <span id="subtotal-carrinho">R$ 0,00</span></p>
                 <p>Taxa de Serviço <span>R$ 0,99</span></p>
-                <p>Taxa de entrega <span>R$ 10,99</span></p>
+                <p>Taxa de entrega <span>R$ 5,99</span></p>
                 <hr>
                 <p class="total">Total <span id="total-carrinho">R$ 0,00</span></p>
             </div>

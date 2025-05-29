@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Cartão</title>
   <link rel="stylesheet" href="./index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -12,32 +15,50 @@
   </header>
 
   <main class="container">
+    <input id="tipo-cartao" type="hidden">
     <h2 id="titulo-cartao">Adicionar novo cartão</h2>
-    <form id="formCartao">
-      <label>Número do cartão</label>
-      <input type="text" placeholder="0000 0000 0000 0000" required>
-
-      <label>Nome impresso no cartão</label>
-      <input type="text" placeholder="Nome completo" required>
-
-      <div class="linha-cartao">
-        <div>
-          <label>Validade</label>
-          <input type="text" placeholder="MM/AA" required>
-        </div>
-        <div>
-          <label>CVV</label>
-          <input type="text" placeholder="123" required>
+    
+    <form id="formCartao" class="form-cartao">
+      <!-- Número do Cartão -->
+      <div class="form-group">
+        <label for="numero-cartao">Número do cartão</label>
+        <div class="input-wrapper">
+          <input type="text" id="numero-cartao" placeholder="0000 0000 0000 0000" required>
+          <img id="bandeira-cartao" class="icone-bandeira" />
         </div>
       </div>
 
-      <label>Apelido do cartão</label>
-      <input type="text" placeholder="Ex: Cartão pessoal">
+      <!-- Nome do Titular -->
+      <div class="form-group">
+        <label for="nome-cartao">Nome impresso no cartão</label>
+        <input type="text" id="nome-cartao" placeholder="Nome completo" required>
+      </div>
 
-      <label>CPF/CNPJ do titular</label>
-      <input type="text" placeholder="000.000.000-00">
+      <!-- Validade e CVV -->
+      <div class="linha-cartao">
+        <div class="form-group">
+          <label for="validade-cartao">Validade</label>
+          <input type="text" id="validade-cartao" placeholder="MM/AAAA" required>
+        </div>
+        <div class="form-group">
+          <label for="cvv-cartao">CVV</label>
+          <input type="text" id="cvv-cartao" placeholder="123" required>
+        </div>
+      </div>
 
-      <button type="submit">Salvar cartão</button>
+      <!-- Apelido do Cartão -->
+      <div class="form-group">
+        <label for="apelido-cartao">Apelido do cartão</label>
+        <input type="text" id="apelido-cartao" placeholder="Ex: Cartão pessoal">
+      </div>
+
+      <!-- CPF do Titular -->
+      <div class="form-group">
+        <label for="cpf-cartao">CPF/CNPJ do titular</label>
+        <input type="text" id="cpf-cartao" placeholder="000.000.000-00">
+      </div>
+
+      <button type="submit" class="btn-submit">Salvar cartão</button>
     </form>
   </main>
 

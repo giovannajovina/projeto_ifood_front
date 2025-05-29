@@ -81,113 +81,158 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
 
-let quantidadeSelecionada = 1;
-let precoAtual = 0;
+    let quantidadeSelecionada = 1;
+    let precoAtual = 0;
 
-window.abrirModalProduto = function (produto) {
-    quantidadeSelecionada = 1;
-    precoAtual = parseFloat(produto.valor_unitario);
+    window.abrirModalProduto = function (produto) {
+        quantidadeSelecionada = 1;
+        precoAtual = parseFloat(produto.valor_unitario);
 
-    document.getElementById("modal-img-produto").src = produto.imagem;
-    document.getElementById("modal-nome-produto").innerText = produto.nome;
-    document.getElementById("modal-descricao-produto").innerText = produto.descricao || "";
-    document.getElementById("modal-preco-produto").innerText = `R$ ${precoAtual.toFixed(2)}`;
+        document.getElementById("modal-img-produto").src = produto.imagem;
+        document.getElementById("modal-nome-produto").innerText = produto.nome;
+        document.getElementById("modal-descricao-produto").innerText = produto.descricao || "";
+        document.getElementById("modal-preco-produto").innerText = `R$ ${precoAtual.toFixed(2)}`;
 
-    const loja = JSON.parse(localStorage.getItem("detalhes_loja"));
-    document.getElementById("modal-loja-nome").innerText = loja?.nome_fantasia || "";
-    document.getElementById("modal-loja-avaliacao").innerText = `⭐ ${loja?.nota || "4.5"}`;
+        const loja = JSON.parse(localStorage.getItem("detalhes_loja"));
+        document.getElementById("modal-loja-nome").innerText = loja?.nome_fantasia || "";
+        document.getElementById("modal-loja-avaliacao").innerText = `⭐ ${loja?.nota || "4.5"}`;
 
-    document.getElementById("comentario").value = "";
-    document.getElementById("quantidade-produto").innerText = quantidadeSelecionada;
-    document.getElementById("modal-total-produto").innerText = `R$ ${(precoAtual * quantidadeSelecionada).toFixed(2)}`;
+        document.getElementById("comentario").value = "";
+        document.getElementById("quantidade-produto").innerText = quantidadeSelecionada;
+        document.getElementById("modal-total-produto").innerText = `R$ ${(precoAtual * quantidadeSelecionada).toFixed(2)}`;
 
-    document.getElementById("btn-adicionar").onclick = () => {
-        const observacao = document.getElementById("comentario").value;
-        const itemCarrinho = {
-            id: produto.id,
-            nome: produto.nome,
-            preco: precoAtual,
-            imagem: produto.imagem,
-            quantidade: quantidadeSelecionada,
-            observacao: observacao
+        document.getElementById("btn-adicionar").onclick = () => {
+            const observacao = document.getElementById("comentario").value;
+            const itemCarrinho = {
+                id: produto.id,
+                nome: produto.nome,
+                preco: precoAtual,
+                imagem: produto.imagem,
+                quantidade: quantidadeSelecionada,
+                observacao: observacao
+            };
+
+            let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+            carrinho.push(itemCarrinho);
+            localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+            atualizarCarrinho();
+            fecharModalProduto();
         };
 
-        let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-        carrinho.push(itemCarrinho);
-        localStorage.setItem("carrinho", JSON.stringify(carrinho));
-
+        document.getElementById("modal-produto").classList.add("ativo");
+    };
+    window.abrirCarrinho = function () {
+        document.getElementById("modal-carrinho").classList.add("ativo");
         atualizarCarrinho();
-        fecharModalProduto();
+    };
+    
+    window.fecharCarrinho = function () {
+        document.getElementById("modal-carrinho").classList.remove("ativo");
+    };
+    window.atualizarCarrinho = function () {
+        const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        const container = document.getElementById("itens-carrinho");
+        const subtotalElement = document.getElementById("subtotal-carrinho");
+        const totalElement = document.getElementById("total-carrinho");
+        const qtdElement = document.getElementById("qtd-carrinho");
+        const loja = JSON.parse(localStorage.getItem("detalhes_loja"));
+
+        container.innerHTML = "";
+
+        const agrupado = {};
+        carrinho.forEach(item => {
+            const chave = item.id + "|" + (item.observacao || "");
+            if (!agrupado[chave]) {
+                agrupado[chave] = { ...item };
+            } else {
+                agrupado[chave].quantidade += item.quantidade;
+            }
+        });
+
+        let subtotal = 0;
+        Object.values(agrupado).forEach(item => {
+            const totalItem = item.preco * item.quantidade;
+            subtotal += totalItem;
+
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <p><strong>${item.quantidade}x</strong> ${item.nome} — R$ ${totalItem.toFixed(2)}</p>
+                ${item.observacao ? `<small>${item.observacao}</small>` : ""}
+                <hr>
+            `;
+            container.appendChild(div);
+        });
+
+        const taxaServico = 0.99;
+        const taxaEntrega = 5.99;
+        const total = subtotal + taxaServico + taxaEntrega;
+
+        subtotalElement.innerText = `R$ ${subtotal.toFixed(2)}`;
+        totalElement.innerText = `R$ ${total.toFixed(2)}`;
+        qtdElement.innerText = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+        document.getElementById("loja-carrinho").innerText = loja?.nome_fantasia || "";
     };
 
-    document.getElementById("modal-produto").classList.add("ativo");
-};
-window.abrirCarrinho = function () {
-    document.getElementById("modal-carrinho").classList.add("ativo");
-    atualizarCarrinho();
-  };
-  
-  window.fecharCarrinho = function () {
-    document.getElementById("modal-carrinho").classList.remove("ativo");
-  };
-  window.atualizarCarrinho = function () {
-    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-    const container = document.getElementById("itens-carrinho");
-    const subtotalElement = document.getElementById("subtotal-carrinho");
-    const totalElement = document.getElementById("total-carrinho");
-    const qtdElement = document.getElementById("qtd-carrinho");
-    const loja = JSON.parse(localStorage.getItem("detalhes_loja"));
 
-    container.innerHTML = "";
+    
 
-    const agrupado = {};
+    window.fecharModalProduto = function () {
+        document.getElementById("modal-produto").classList.remove("ativo");
+    }
+
+    window.alterarQuantidade = function (delta) {
+        quantidadeSelecionada = Math.max(1, quantidadeSelecionada + delta);
+        document.getElementById("quantidade-produto").innerText = quantidadeSelecionada;
+        document.getElementById("modal-total-produto").innerText = `R$ ${(precoAtual * quantidadeSelecionada).toFixed(2)}`;
+    };
+    window.finalizarPedido = function () {
+        window.location.href = "../pedido/finalizar_pedido/checkout.html";
+        const subtotal = document.getElementById('subtotal-carrinho');
+        const valorTexto = subtotal.textContent.trim(); // Remove espaços extras
+        const valorSomenteNumero = valorTexto.replace("R$", "").trim();
+        // console.log(valorSomenteNumero);
+        const valorNumerico = parseFloat(valorSomenteNumero.replace(",", "."));
+        // console.log(valorNumerico);
+
+        localStorage.setItem("subtotal", valorNumerico);
+        gerarResumoCarrinho();
+    };
+
+    // Função para gerar o resumo do carrinho
+function gerarResumoCarrinho() {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+
+    const resumoMap = {};
+
     carrinho.forEach(item => {
-        const chave = item.id + "|" + (item.observacao || "");
-        if (!agrupado[chave]) {
-            agrupado[chave] = { ...item };
+        const chave = item.id + '|' + (item.observacao || '');
+
+        if (!resumoMap[chave]) {
+            resumoMap[chave] = {
+                nome: item.nome,
+                preco: parseFloat(item.preco),
+                quantidade: item.quantidade,
+                observacao: item.observacao,
+                total: parseFloat(item.preco) * item.quantidade
+            };
         } else {
-            agrupado[chave].quantidade += item.quantidade;
+            resumoMap[chave].quantidade += item.quantidade;
+            resumoMap[chave].total += parseFloat(item.preco) * item.quantidade;
         }
     });
 
-    let subtotal = 0;
-    Object.values(agrupado).forEach(item => {
-        const totalItem = item.preco * item.quantidade;
-        subtotal += totalItem;
+    const resumoArray = Object.values(resumoMap);
+    const valorTotal = resumoArray.reduce((acc, item) => acc + item.total, 0);
 
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <p><strong>${item.quantidade}x</strong> ${item.nome} — R$ ${totalItem.toFixed(2)}</p>
-            ${item.observacao ? `<small>${item.observacao}</small>` : ""}
-            <hr>
-        `;
-        container.appendChild(div);
-    });
-
-    const taxaServico = 0.99;
-    const taxaEntrega = 10.99;
-    const total = subtotal + taxaServico + taxaEntrega;
-
-    subtotalElement.innerText = `R$ ${subtotal.toFixed(2)}`;
-    totalElement.innerText = `R$ ${total.toFixed(2)}`;
-    qtdElement.innerText = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
-    document.getElementById("loja-carrinho").innerText = loja?.nome_fantasia || "";
-};
-
-
-  
-
-window.fecharModalProduto = function () {
-    document.getElementById("modal-produto").classList.remove("ativo");
+    localStorage.setItem('resumoCarrinho', JSON.stringify({
+        itens: resumoArray,
+        valorTotal: valorTotal.toFixed(2)
+    }));
 }
 
-window.alterarQuantidade = function (delta) {
-    quantidadeSelecionada = Math.max(1, quantidadeSelecionada + delta);
-    document.getElementById("quantidade-produto").innerText = quantidadeSelecionada;
-    document.getElementById("modal-total-produto").innerText = `R$ ${(precoAtual * quantidadeSelecionada).toFixed(2)}`;
-};
-window.finalizarPedido = function () {
-    window.location.href = "../pedido/finalizar_pedido/checkout.html";
-};
-    
+
+
+
+    atualizarCarrinho();
 });
