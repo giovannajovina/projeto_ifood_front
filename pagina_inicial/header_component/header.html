@@ -1,6 +1,7 @@
 <header>
             <link rel="stylesheet" href="/pagina_inicial/style.css">
         <!-- <script src="/config.js"></script> -->
+        <script src="/loja/loja.js"></script>
         <script src="../index.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkykjH21ut-e8c_F90tJmgO6IX2KvALZ4&libraries=places&callback=initAutocomplete" async defer></script>
 
@@ -21,7 +22,11 @@
                 <span class="location-icon" onclick="toggleModal()"><img src="/pagina_inicial/imagens/do-utilizador.png" alt=""></span>
             
             <div class="search-bar">
-          <span>🛒</span>
+              <div id="header-placeholder"></div>
+              <script src="../loader_header.js" defer></script>
+              <div class="carrinho-icone" onclick="abrirCarrinho()">
+                  🛒 <span id="qtd-carrinho">0</span>
+              </div>
             </div>
             <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         </div>
