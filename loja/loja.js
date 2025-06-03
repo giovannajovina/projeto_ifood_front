@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response_loja = await fetch(`https://clickfood.shop/api/loja/${lojaId}`);
+        const response_loja = await fetch(`http://127.0.0.1:8000/api/loja/${lojaId}`);
         const data = await response_loja.json();
         localStorage.setItem("detalhes_loja", JSON.stringify(data));
 
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("nota-loja").textContent = data.nota || "4.5"; // substitua se você tiver esse campo
 
 
-        const response_produtos_loja = await fetch(`https://clickfood.shop/api/lojas/${lojaId}/produtos`);
+        const response_produtos_loja = await fetch(`http://127.0.0.1:8000/api/lojas/${lojaId}/produtos`);
         const produtos = await response_produtos_loja.json();
 
         console.log(produtos); // Confirma o retorno
@@ -34,18 +34,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         produtos.forEach(produto => {
             const div = document.createElement("div");
             div.classList.add("produto-card");
-          
+
             div.innerHTML = `
               <img src="${produto.imagem}" alt="${produto.nome}">
               <h3>${produto.nome}</h3>
               <p>${produto.descricao || ''}</p>
               <strong>R$ ${parseFloat(produto.valor_unitario).toFixed(2)}</strong>
             `;
-          
+
             div.addEventListener("click", () => abrirModalProduto(produto));
             container.appendChild(div);
-          });
-          
+        });
+
 
     } catch (error) {
         console.error("Erro ao buscar produtos:", error);
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     document.getElementById("btn-ver-mais").addEventListener("click", () => {
         document.getElementById("modal-detalhes-loja").classList.add("ativo");
-    
+
         const dataLoja = localStorage.getItem("detalhes_loja");
         if (dataLoja) {
             const loja = JSON.parse(dataLoja);
@@ -66,16 +66,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
         }
     });
-    
+
     // 🔥 Agora tornamos as funções globais:
     window.fecharModal = function () {
         document.getElementById("modal-detalhes-loja").classList.remove("ativo");
     };
-    
+
     window.mudarAba = function (aba) {
         document.querySelectorAll('.aba-conteudo').forEach(e => e.classList.remove('ativo'));
         document.querySelectorAll('.abas li').forEach(e => e.classList.remove('ativo'));
-    
+
         document.getElementById(`aba-${aba}`).classList.add('ativo');
         document.querySelector(`.abas li[onclick="mudarAba('${aba}')"]`).classList.add('ativo');
     };
@@ -113,12 +113,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             };
 
             let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-            carrinho.push(itemCarrinho);
-            localStorage.setItem("carrinho", JSON.stringify(carrinho));
 
+            const chave = itemCarrinho.id + "|" + (itemCarrinho.observacao || "");
+            let itemExistente = carrinho.find(item => (item.id + "|" + (item.observacao || "")) === chave);
+
+            if (itemExistente) {
+                itemExistente.quantidade += quantidadeSelecionada;
+            } else {
+                carrinho.push(itemCarrinho);
+            }
+
+            localStorage.setItem("carrinho", JSON.stringify(carrinho));
             atualizarCarrinho();
             fecharModalProduto();
         };
+
 
         document.getElementById("modal-produto").classList.add("ativo");
     };
@@ -126,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("modal-carrinho").classList.add("ativo");
         atualizarCarrinho();
     };
-    
+
     window.fecharCarrinho = function () {
         document.getElementById("modal-carrinho").classList.remove("ativo");
     };
@@ -151,16 +160,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         let subtotal = 0;
-        Object.values(agrupado).forEach(item => {
+        Object.entries(agrupado).forEach(([chave, item]) => {
             const totalItem = item.preco * item.quantidade;
             subtotal += totalItem;
 
             const div = document.createElement("div");
             div.innerHTML = `
-                <p><strong>${item.quantidade}x</strong> ${item.nome} — R$ ${totalItem.toFixed(2)}</p>
-                ${item.observacao ? `<small>${item.observacao}</small>` : ""}
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                    <p style="margin: 0;"><strong>${item.nome}</strong></p>
+                    ${item.observacao ? `<small>${item.observacao}</small><br>` : ""}
+                    <small>Valor unitário: R$ ${item.preco.toFixed(2)}</small>
+                    </div>
+                    <div style="text-align: right;">
+                    <p style="margin: 0;"><strong>R$ ${(item.preco * item.quantidade).toFixed(2)}</strong></p>
+                    <div class="acoes-carrinho">
+                        <button onclick="alterarQuantidadeItem('${chave}', -1)">−</button>
+                        <span>${item.quantidade}x</span>
+                        <button onclick="alterarQuantidadeItem('${chave}', 1)">+</button>
+                        <button class="remover" onclick="removerItemCarrinho('${chave}')">🗑️</button>
+                    </div>
+                    </div>
+                </div>
                 <hr>
-            `;
+                `;
+
+
             container.appendChild(div);
         });
 
@@ -170,12 +195,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         subtotalElement.innerText = `R$ ${subtotal.toFixed(2)}`;
         totalElement.innerText = `R$ ${total.toFixed(2)}`;
-        qtdElement.innerText = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+        if (qtdElement) {
+            qtdElement.innerText = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+        }
         document.getElementById("loja-carrinho").innerText = loja?.nome_fantasia || "";
     };
 
 
-    
+
+    // let subtotal = 0;
+    // Object.entries(agrupado).forEach(([chave, item]) => {
+    //     const totalItem = item.preco * item.quantidade;
+    //     subtotal += totalItem;
+
+    //     const div = document.createElement("div");
+    //     div.innerHTML = `
+    //     <p>
+    //         <strong>${item.nome}</strong><br>
+    //         ${item.observacao ? `<small>${item.observacao}</small><br>` : ""}
+    //         <button onclick="alterarQuantidadeItem('${chave}', -1)">−</button>
+    //         <span>${item.quantidade}x</span>
+    //         <button onclick="alterarQuantidadeItem('${chave}', 1)">+</button>
+    //         <button onclick="removerItemCarrinho('${chave}')">🗑️</button>
+    //     </p>
+    //     <p>Subtotal: R$ ${totalItem.toFixed(2)}</p>
+    //     <hr>
+    // `;
+    //     container.appendChild(div);
+    // });
+
+
+
 
     window.fecharModalProduto = function () {
         document.getElementById("modal-produto").classList.remove("ativo");
@@ -200,37 +250,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     // Função para gerar o resumo do carrinho
-function gerarResumoCarrinho() {
-    const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
+    function gerarResumoCarrinho() {
+        const carrinho = JSON.parse(localStorage.getItem('carrinho') || '[]');
 
-    const resumoMap = {};
+        const resumoMap = {};
 
-    carrinho.forEach(item => {
-        const chave = item.id + '|' + (item.observacao || '');
+        carrinho.forEach(item => {
+            const chave = item.id + '|' + (item.observacao || '');
 
-        if (!resumoMap[chave]) {
-            resumoMap[chave] = {
-                nome: item.nome,
-                preco: parseFloat(item.preco),
-                quantidade: item.quantidade,
-                observacao: item.observacao,
-                total: parseFloat(item.preco) * item.quantidade
-            };
-        } else {
-            resumoMap[chave].quantidade += item.quantidade;
-            resumoMap[chave].total += parseFloat(item.preco) * item.quantidade;
+            if (!resumoMap[chave]) {
+                resumoMap[chave] = {
+                    produto_id: item.id, // ✅ adicionando o id real
+                    nome: item.nome,
+                    preco: parseFloat(item.preco),
+                    quantidade: item.quantidade,
+                    observacao: item.observacao,
+                    total: parseFloat(item.preco) * item.quantidade
+                };
+            } else {
+                resumoMap[chave].quantidade += item.quantidade;
+                resumoMap[chave].total += parseFloat(item.preco) * item.quantidade;
+            }
+        });
+
+        const resumoArray = Object.values(resumoMap);
+        const valorTotal = resumoArray.reduce((acc, item) => acc + item.total, 0);
+
+        localStorage.setItem('resumoCarrinho', JSON.stringify({
+            itens: resumoArray,
+            valorTotal: valorTotal.toFixed(2)
+        }));
+    }
+
+    window.alterarQuantidadeItem = function (chave, delta) {
+        let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        let index = carrinho.findIndex(item => (item.id + "|" + (item.observacao || "")) === chave);
+
+        if (index !== -1) {
+            carrinho[index].quantidade += delta;
+            if (carrinho[index].quantidade <= 0) {
+                carrinho.splice(index, 1);
+            }
         }
-    });
 
-    const resumoArray = Object.values(resumoMap);
-    const valorTotal = resumoArray.reduce((acc, item) => acc + item.total, 0);
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        atualizarCarrinho();
+    };
 
-    localStorage.setItem('resumoCarrinho', JSON.stringify({
-        itens: resumoArray,
-        valorTotal: valorTotal.toFixed(2)
-    }));
-}
-
+    window.removerItemCarrinho = function (chave) {
+        let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+        carrinho = carrinho.filter(item => (item.id + "|" + (item.observacao || "")) !== chave);
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        atualizarCarrinho();
+    };
 
 
 
