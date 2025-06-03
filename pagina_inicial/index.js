@@ -361,6 +361,7 @@ window.addEventListener("headerLoaded", function () {
             `${selectedAddressData.logradouro}, ${selectedAddressData.bairro} - ${selectedAddressData.cidade}, ${selectedAddressData.estado}`;
 
         document.getElementById("addressModal").style.display = "none";
+     
         document.getElementById("addressDetailsModal").style.display = "flex";
 
         document.getElementById("numero").addEventListener("input", function () {
@@ -584,6 +585,7 @@ window.addEventListener("headerLoaded", function () {
     function closeEditModal() {
         document.getElementById("editAddressModal").style.display = "none";
         document.getElementById("editOverlay").style.display = "none";
+        document.getElementById("modal_v2").style.display = "none";
     }
 
     // 🔥 Fechar modal ao clicar no fundo escuro

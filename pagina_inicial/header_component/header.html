@@ -1,123 +1,133 @@
 <header>
-            <link rel="stylesheet" href="/pagina_inicial/style.css">
-        <!-- <script src="/config.js"></script> -->
-        <script src="/loja/loja.js"></script>
-        <script src="../index.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkykjH21ut-e8c_F90tJmgO6IX2KvALZ4&libraries=places&callback=initAutocomplete" async defer></script>
+  <link rel="stylesheet" href="/pagina_inicial/style.css">
+  <!-- <script src="/config.js"></script> -->
+  <script src="/loja/loja.js"></script>
+  <script src="../index.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkykjH21ut-e8c_F90tJmgO6IX2KvALZ4&libraries=places&callback=initAutocomplete"
+    async defer></script>
 
 
-        <div class="logo">
-          <a href="/pagina_inicial/index.html">
-            iFood Clone
-          </a>
-         </div>
-        
-        <div class="search-bar">
-               <input type="text" placeholder="Busque por item ou loja">
-            </div>
-            <div class="icons">
+  <div class="logo">
+    <a href="/pagina_inicial/index.html">
+      iFood Clone
+    </a>
+  </div>
 
-                <button id="openModalBtn"></button>
-                
-                <span class="location-icon" onclick="toggleModal()"><img src="/pagina_inicial/imagens/do-utilizador.png" alt=""></span>
-            
-            <div class="search-bar">
-              <div id="header-placeholder"></div>
-              <script src="../loader_header.js" defer></script>
-              <div class="carrinho-icone" onclick="abrirCarrinho()">
-                  🛒 <span id="qtd-carrinho">0</span>
-              </div>
-            </div>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-        </div>
-        <div class="mobile-nav" id="mobileNav">
-            <ul>
-                <li><a href="#">Início</a></li>
-                <li><a href="#">Restaurantes</a></li>
-                <button id="openModalBtn-mobile">Escolher Endereço</button>
-            </ul>
-        </div>
-    </header>
+  <div class="search-bar">
+    <input type="text" placeholder="Busque por item ou loja">
+  </div>
+  <div class="icons">
 
-    <div id="addressModal" class="modal_loc">
-        <div class="modal_loc-content">
-          <span class="close_loc">&times;</span>
-      
-          <div class="modal-image">
-            <img src="/pagina_inicial/imagens/logo.png" alt="Localização" />
-          </div>
-      
-          <h2>Onde você quer receber seu pedido?</h2>
-      
-          <div class="search-container">
-            <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
-          </div>
-      
-          <ul id="suggestions"></ul>
-      
-          <ul id="savedAddresses" class="address-list"></ul>
-      
-          <div class="use-location-btn">
-            <button id="useMyLocation">📍 Usar minha localização atual</button>
-          </div>
-      
-          <p class="login-text">
-            Já tem um endereço salvo? <a href="/entrar/index.html" class="login-link">Entrar ou cadastrar</a>
-          </p>
-        </div>
+    <button id="openModalBtn"></button>
+
+    <span class="location-icon" onclick="toggleModal()"><img src="/pagina_inicial/imagens/do-utilizador.png"
+        alt=""></span>
+
+    <div class="search-bar">
+      <div id="header-placeholder"></div>
+      <script src="../loader_header.js" defer></script>
+      <div class="carrinho-icone" onclick="abrirCarrinho()">
+        🛒 <span id="qtd-carrinho">0</span>
       </div>
-      
-      <div id="addressDetailsModal" class="modal_loc">
-        <div class="modal_loc-content">
-          <span class="close_loc" id="closeAddressDetails">&times;</span>
-          <div class="modal-image">
-            <img src="/pagina_inicial/imagens/logo.png" alt="Localização" />
-          </div>
-          <h2>Confirme os detalhes do endereço</h2>
-          <div class="search-container">
-            <p id="selectedAddress"></p>
-          </div>
-          <div class="divisao">
-            <div class="search-container">
-              <input type="text" id="numero" placeholder="Número">
-            </div>
-            <div class="search-container">
-              <input type="text" id="complemento" placeholder="Complemento">
-            </div>
-          </div>
-          <div class="buttons-address">
-            <button id="saveAddress">Salvar</button>
-            <button id="cancelAddress">Cancelar</button>
-          </div>
-        </div>
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <ul>
+      <li><a href="#">Início</a></li>
+      <li><a href="#">Restaurantes</a></li>
+      <button id="openModalBtn-mobile">Escolher Endereço</button>
+    </ul>
+  </div>
+</header>
+
+<div id="addressModal" class="modal_loc">
+  <div class="modal_loc-content">
+    <span class="close_loc">&times;</span>
+
+    <div class="modal-image">
+      <img src="/pagina_inicial/imagens/logo.png" alt="Localização" />
+    </div>
+
+    <h2>Onde você quer receber seu pedido?</h2>
+
+    <div class="search-container">
+      <input type="text" id="addressSearch" placeholder="Buscar endereço e número">
+    </div>
+
+    <ul id="suggestions"></ul>
+
+    <ul id="savedAddresses" class="address-list"></ul>
+
+    <div class="use-location-btn">
+      <button id="useMyLocation">📍 Usar minha localização atual</button>
+    </div>
+
+    <p class="login-text">
+      Já tem um endereço salvo? <a href="/entrar/index.html" class="login-link">Entrar ou cadastrar</a>
+    </p>
+  </div>
+</div>
+
+<div id="addressDetailsModal" class="modal_loc">
+  <div class="modal_loc-content">
+    <span class="close_loc" id="closeAddressDetails">&times;</span>
+    <div class="modal-image">
+      <img src="/pagina_inicial/imagens/logo.png" alt="Localização" />
+    </div>
+    <h2>Confirme os detalhes do endereço</h2>
+    <div class="search-container">
+      <p id="selectedAddress"></p>
+    </div>
+    <div class="divisao">
+      <div class="search-container">
+        <input type="text" id="numero" placeholder="Número">
       </div>
-      
- <!-- Fundo escurecido -->
+      <div class="search-container">
+        <input type="text" id="complemento" placeholder="Complemento">
+      </div>
+    </div>
+    <div class="buttons-address">
+      <button id="saveAddress">Salvar</button>
+      <button id="cancelAddress">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Fundo escurecido -->
 <div id="editOverlay" class="modal-overlay"></div>
 
 <!-- Modal de edição -->
-<div id="editAddressModal" class="modal">
-    <span class="close" onclick="closeEditModal()">&times;</span>
-    <h2>Editar Endereço</h2>
-    <p id="editLogradouro"></p>
+<div id="editAddressModal" class="modal_v2">
+  <span class="close" onclick="closeEditModal()">&times;</span>
+  <div class="modal-image">
+    <img src="/pagina_inicial/imagens/logo.png" alt="Localização" />
+  </div>
+
+  <h2>Editar Seu Endereço</h2>
+  <p id="editLogradouro"></p>
+  <div class="alinha_endereco">
     <label>Número:</label>
     <input type="text" id="editNumero" placeholder="Digite o número">
     <label>Complemento:</label>
     <input type="text" id="editComplemento" placeholder="Digite o complemento">
-    <button id="saveEditBtn">Salvar Alterações</button>
-</div>
-    <div id="sideModal" class="modal">
-        <span class="close-btn" onclick="toggleModal()">&times;</span>
-        <div class="nome">
-            <h2 > Olá, </h2>
-            <h2 id="nome"> </h2>
-        </div>
-        <ul class="menu-list">
-            <li><img src="/pagina_inicial/imagens/pedidos.png" alt="Pedidos">Pedidos</li>
-            <li><img src="/pagina_inicial/imagens/dinheiro.png" alt="Pagamento">Pagamento</li>
-            <li><img src="/pagina_inicial/imagens/conf.png" alt="Meus Dados"> <a href="/meus_dados/index.html">Meus dados</a></li>
-            <li id="openModalBtnMenu"><img src="/pagina_inicial/imagens/endereco.png" alt="Meus Dados">Meu endereço</li>
-        </ul>
+    <div class="center_enderect">
+      <button id="saveEditBtn">Salvar Alterações</button>
     </div>
-
-  
+  </div>
+</div>
+<div id="sideModal" class="modal">
+  <span class="close-btn" onclick="toggleModal()">&times;</span>
+  <div class="nome">
+    <h2> Olá, </h2>
+    <h2 id="nome"> </h2>
+  </div>
+  <ul class="menu-list">
+    <li><img src="/pagina_inicial/imagens/pedidos.png" alt="Pedidos">Pedidos</li>
+    <li><img src="/pagina_inicial/imagens/dinheiro.png" alt="Pagamento">Pagamento</li>
+    <li><img src="/pagina_inicial/imagens/conf.png" alt="Meus Dados"> <a href="/meus_dados/index.html">Meus dados</a>
+    </li>
+    <li id="openModalBtnMenu"><img src="/pagina_inicial/imagens/endereco.png" alt="Meus Dados">Meu endereço</li>
+  </ul>
+</div>
