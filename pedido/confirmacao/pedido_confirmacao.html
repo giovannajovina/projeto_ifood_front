@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido Confirmado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .status-wrapper {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #EA1D2C;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        #barra-progresso {
+            height: 10px;
+            width: 100%;
+            background: #ddd;
+            border-radius: 20px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        #barra-preenchida {
+            height: 100%;
+            width: 0%;
+            background: #EA1D2C;
+            transition: width 1s ease-in-out;
+        }
+
+        .completo {
+            background: #28a745 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="status-wrapper">
+        <!-- <img src="https://static.ifood-static.com.br/image/upload/f_auto/webapp/checkout/success-check.png" alt="Sucesso" width="70" /> -->
+        <h1 id="status-texto">Pedido Confirmado!</h1>
+        <p id="mensagem">Seu pedido foi enviado com sucesso para a loja.</p>
+        <p>ID do Pedido: <strong id="pedido-id">—</strong></p>
+
+        <div id="barra-progresso">
+            <div id="barra-preenchida"></div>
+        </div>
+        <a id="btn-voltar" href="../../pagina_inicial/index.html"
+            style="display:none; margin-top: 15px; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 6px;">
+            Voltar para o início
+        </a>
+    </div>
+
+    <script>
+        const pedidoId = localStorage.getItem("ultimo_pedido_id") || "—";
+        document.getElementById("pedido-id").innerText = pedidoId;
+
+        const texto = document.getElementById("status-texto");
+        const msg = document.getElementById("mensagem");
+        const barra = document.getElementById("barra-preenchida");
+
+        let etapas = [
+            { texto: "Pedido Confirmado!", msg: "Seu pedido foi enviado com sucesso para a loja.", tempo: 3000, progresso: 25 },
+            { texto: "Pedido em preparo 🍳", msg: "O restaurante está preparando seu pedido.", tempo: 2000, progresso: 50 },
+            { texto: "Pedido pronto! 🛍️", msg: "O pedido está pronto para entrega.", tempo: 2000, progresso: 75 },
+            { texto: "Pedido a caminho 🛵", msg: "Seu pedido está a caminho!", tempo: 2000, progresso: 100 }
+        ];
+
+        let etapaAtual = 0;
+
+        function atualizarEtapa() {
+            const token = localStorage.getItem("token");
+            if (etapaAtual >= etapas.length) return;
+
+            const etapa = etapas[etapaAtual];
+            texto.innerText = etapa.texto;
+            msg.innerText = etapa.msg;
+            barra.style.width = etapa.progresso + "%";
+
+            if (etapa.progresso === 100) {
+                barra.classList.add("completo");
+                barra.classList.add("completo");
+                document.getElementById("btn-voltar").style.display = "inline-block";
+
+                // 🔽 Atualizar status no banco
+                const token = localStorage.getItem("token");
+                const pedidoId = localStorage.getItem("ultimo_pedido_id");
+
+                fetch(`http://127.0.0.1:8000/api/pedido/${pedidoId}/status`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ status_id: 1 }) // 5 = a caminho
+                })
+                    .then(res => res.json())
+                    .then(data => console.log("Status atualizado:", data))
+                    .catch(err => console.error("Erro ao atualizar status:", err));
+            }
+
+            etapaAtual++;
+            if (etapaAtual < etapas.length) {
+                setTimeout(atualizarEtapa, etapa.tempo);
+            }
+            if (etapa.progresso === 100) {
+                barra.classList.add("completo");
+                document.getElementById("btn-voltar").style.display = "inline-block";
+            }
+        }
+
+        setTimeout(atualizarEtapa, 1000);
+    </script>
+
+</body>
+
+</html>

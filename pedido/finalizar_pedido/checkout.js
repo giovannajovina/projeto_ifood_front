@@ -1,4 +1,55 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
+  async function enviarPedido() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const loja = JSON.parse(localStorage.getItem("detalhes_loja"));
+    const endereco = JSON.parse(localStorage.getItem("endereco_selecionado"));
+    const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const resumo = JSON.parse(localStorage.getItem("resumoCarrinho"));
+    const cartaoId = localStorage.getItem("cartao_id");
+    const tipoPagamento = localStorage.getItem("tipo_cartao");
+    const cpfNota = document.getElementById("cpf")?.value;
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      loja_id: loja.id,
+      valor_total: parseFloat(localStorage.getItem("subtotal")) + 0.99 + 5.99,
+      pagamento_metodo_id: tipoPagamento === "credito" ? 1 : 2,
+      dados_cartao_id: parseInt(cartaoId),
+      cpf_nota: cpfNota,
+      endereco_id: endereco?.id, // ✅ aqui adicionamos
+      itens: carrinho.map(item => ({
+        produto_id: item.id, // ✅ usando o ID
+        quantidade: item.quantidade
+      }))
+
+    };
+
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/pedido/finalizar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error("Erro ao enviar pedido");
+
+      const data = await response.json();
+      alert("Pedido realizado com sucesso! ID: " + data.pedido_id);
+      localStorage.removeItem("carrinho");
+      localStorage.removeItem("resumoCarrinho");
+      localStorage.setItem("ultimo_pedido_id", data.pedido_id);
+      window.location.href = "../confirmacao/pedido_confirmacao.html";
+    } catch (e) {
+      console.error(e);
+      alert("Falha ao finalizar pedido.");
+    }
+  }
+
   const endereco = JSON.parse(localStorage.getItem("endereco_selecionado"));
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
@@ -69,10 +120,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Erro ao buscar CPF do usuário:", e);
   }
 
-  // (opcional) evento para botão "Fazer pedido"
   document.getElementById("btn-finalizar").addEventListener("click", () => {
-    alert("Pedido pronto para ser enviado com os dados acima!");
+    enviarPedido();
   });
+
 
 
   const token = localStorage.getItem("token");
@@ -93,33 +144,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerText = 'Nenhum cartão selecionado.';
   }
 
- 
+
 
 
   exibirCartoes();
 });
- async function exibirCartoes() {
-    const token = localStorage.getItem("token");
-    const container = document.getElementById("cartao-container");
-    const btnAdd = document.getElementById("btn-adicionar-cartao");
+async function exibirCartoes() {
+  const token = localStorage.getItem("token");
+  const container = document.getElementById("cartao-container");
+  const btnAdd = document.getElementById("btn-adicionar-cartao");
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/cartao/list", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/cartao/list", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      const cartoes = await response.json();
-      const selecionadoId = localStorage.getItem("cartao_id");
+    const cartoes = await response.json();
+    const selecionadoId = localStorage.getItem("cartao_id");
 
-      container.innerHTML = "";
+    container.innerHTML = "";
 
-      if (cartoes.length > 0) {
-        cartoes.forEach(cartao => {
-          const isSelecionado = cartao.id == selecionadoId;
+    if (cartoes.length > 0) {
+      cartoes.forEach(cartao => {
+        const isSelecionado = cartao.id == selecionadoId;
 
-          const item = document.createElement("div");
-          item.classList.add("cartao-item");
-          item.style = `
+        const item = document.createElement("div");
+        item.classList.add("cartao-item");
+        item.style = `
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -130,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           margin-bottom: 10px;
         `;
 
-          item.innerHTML = `
+        item.innerHTML = `
           <div style="display: flex; align-items: center; gap: 10px;">
             <img src="https://img.icons8.com/color/48/000000/${cartao.bandeira === 'visa' ? 'visa' : 'mastercard'}-logo.png" width="30" alt="Bandeira">
             <div>
@@ -144,18 +195,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             <button onclick="deletarCartao(${cartao.id})" title="Excluir">🗑️</button>
           </div>
         `;
-          container.appendChild(item);
-        });
-      } else {
-        container.innerHTML = "<p>Nenhum cartão cadastrado.</p>";
-      }
-
-      btnAdd.style.display = "block";
-    } catch (e) {
-      console.error("Erro ao carregar cartões:", e);
-      container.innerHTML = "<p>Erro ao carregar dados do cartão</p>";
+        container.appendChild(item);
+      });
+    } else {
+      container.innerHTML = "<p>Nenhum cartão cadastrado.</p>";
     }
+
+    btnAdd.style.display = "block";
+  } catch (e) {
+    console.error("Erro ao carregar cartões:", e);
+    container.innerHTML = "<p>Erro ao carregar dados do cartão</p>";
   }
+}
 window.selecionarCartao = function (id, tipo) {
   localStorage.setItem("cartao_id", id);
   localStorage.setItem("tipo_cartao", tipo);

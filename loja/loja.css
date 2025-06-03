@@ -203,9 +203,9 @@
     cursor: pointer;
   }
   .carrinho-icone {
-    position: fixed;
+    /* position: fixed;
     top: 15px;
-    right: 20px;
+    right: 20px; */
     background: red;
     color: white;
     border-radius: 20px;
@@ -279,5 +279,34 @@
     margin-top: 20px;
     cursor: pointer;
   }
-  
-      
+
+ .acoes-carrinho {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.acoes-carrinho button {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 4px 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.acoes-carrinho button:hover {
+  background-color: #ddd;
+}
+
+.acoes-carrinho .remover {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.acoes-carrinho .remover:hover {
+  background-color: #c0392b;
+}
