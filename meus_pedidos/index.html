@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus pedidos</title>
+    <link rel="stylesheet" href="./index.css">
+        <script src="/pagina_inicial/index.js"></script>
+</head>
+<body>
+      <div id="header-placeholder"></div>
+  <script src="/loader_header.js" defer></script>
+   <div id="listaPedidos" class="lista-pedidos" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;"></div>
+
+<div id="modalPedido" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="background: white; width: 90%; max-width: 600px; padding: 1.5rem; border-radius: 10px; max-height: 90vh; overflow-y: auto; position: relative;">
+    <button onclick="fecharModal()" style="position: absolute; top: 10px; right: 15px; font-size: 1.5rem;">&times;</button>
+    <div id="modalConteudoPedido"></div>
+  </div>
+</div>
+
+
+</body>
+</html>
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    fetch('https://clickfood.shop/api/pedido/meus-pedidos', {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(data => renderizarPedidos(data));
+});
+
+
+function renderizarPedidos(pedidos) {
+    const container = document.getElementById('listaPedidos');
+    container.innerHTML = '';
+
+    pedidos.forEach(pedido => {
+        const loja = pedido.loja?.nome_fantasia ?? '—';
+        const status = pedido.status?.status_nome ?? '—';
+        const itens = pedido.itens || [];
+
+        const iconeStatus = status === 'concluido' ? '✅' :
+                            status === 'a caminho' ? '🚚' :
+                            status === 'preparando' ? '⏳' : '❓';
+
+        const itemHtml = itens.slice(0, 1).map(item =>
+            `<li>1 ${item.produto.nome}</li>`
+        ).join('');
+
+        const maisItens = itens.length > 1 ? `<div style="color: gray; font-size: 0.85rem;">mais ${itens.length - 1} itens</div>` : '';
+
+        const card = document.createElement('div');
+        card.className = 'pedido-card';
+        card.innerHTML = `
+            <div>
+                <div class="pedido-header">${loja}</div>
+                <div class="pedido-status">${iconeStatus} Pedido ${status} • Nº ${pedido.id}</div>
+                <ul class="pedido-itens">
+                    ${itemHtml}
+                </ul>
+                ${maisItens}
+            </div>
+            <div class="pedido-actions">
+                <button onclick="abrirAjuda(${pedido.id})">Ajuda</button>
+                <button onclick="verDetalhesPedido(${pedido.id})">Ver detalhes</button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+function verDetalhesPedido(id) {
+    fetch(`https://clickfood.shop/api/pedidos/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(res => res.json())
+    .then(pedido => {
+        const conteudo = document.getElementById('modalConteudoPedido');
+        let html = `<h2 style="font-size: 1.2rem; font-weight: bold;">${pedido.loja?.nome_fantasia}</h2>`;
+        html += `<p style="color: gray; margin-bottom: 1rem;">Pedido ${pedido.status?.status_nome} • Nº ${pedido.id}</p>`;
+
+        pedido.itens.forEach(item => {
+            html += `
+                <div style="margin-bottom: 1rem;">
+                    <strong>${item.quantidade}x ${item.produto.nome}</strong><br>
+                    <small>${item.observacoes ?? ''}</small><br>
+                    <span>R$ ${parseFloat(item.produto.valor_unitario ?? 0).toFixed(2)}</span>
+
+                </div>
+            `;
+        });
+
+        html += `
+            <hr>
+            <p>Subtotal: R$ ${parseFloat(pedido.preco_total).toFixed(2)}</p>
+            <p>Taxa de entrega: R$ ${parseFloat(pedido.preco_frete ?? 0).toFixed(2)}</p>
+            <p>Taxa de serviço: R$ ${parseFloat(pedido.taxa_servico ?? '0,').toFixed(2)}</p>
+            <p><strong>Total: R$ ${parseFloat(pedido.total_final ?? pedido.preco_total ?? 0).toFixed(2)}</strong></p>
+            <hr>
+            <p><strong>Entrega em:</strong><br>${pedido.endereco?.logradouro ?? ''}, ${pedido.endereco?.numero ?? ''} - ${pedido.endereco?.bairro ?? ''}</p>
+            <p><strong>Data:</strong> ${new Date(pedido.created_at).toLocaleString('pt-BR')}</p>
+            <p><strong>Pagamento: Pelo app</strong> ${pedido.pagamento?.cartao?.tipo ?? ''} ${pedido.pagamento?.cartao?.bandeira ?? ''} •••• ${pedido.pagamento?.cartao?.ultimos_digitos ?? ''}</p>
+        `;
+
+        conteudo.innerHTML = html;
+        document.getElementById('modalPedido').style.display = 'flex';
+    });
+}
+
+function fecharModal() {
+    document.getElementById('modalPedido').style.display = 'none';
+}
+
+</script>
