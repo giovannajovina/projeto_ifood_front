@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const lojaId = localStorage.getItem("loja_id");
+    let lojaData = null; // <-- variável global para guardar os dados da loja
+
 
     if (!lojaId) {
         alert("Loja não selecionada.");
@@ -11,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const response_loja = await fetch(`https://clickfood.shop/api/loja/${lojaId}`);
         const data = await response_loja.json();
         localStorage.setItem("detalhes_loja", JSON.stringify(data));
+        lojaData = data;
 
 
         document.getElementById("logo-loja").src = data.logo || "https://via.placeholder.com/60";
@@ -51,21 +54,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Erro ao buscar produtos:", error);
         alert("Falha ao carregar dados da loja.");
     }
-    document.getElementById("btn-ver-mais").addEventListener("click", () => {
-        document.getElementById("modal-detalhes-loja").classList.add("ativo");
+document.getElementById("btn-ver-mais").addEventListener("click", () => {
+    document.getElementById("modal-detalhes-loja").classList.add("ativo");
 
-        const dataLoja = localStorage.getItem("detalhes_loja");
-        if (dataLoja) {
-            const loja = JSON.parse(dataLoja);
-            document.getElementById("aba-sobre").innerHTML = `
-                ${loja.descricao || "Descrição não disponível"}<br><br>
-                <strong>Endereço:</strong><br>
-                ${loja.endereco || "Endereço não informado"}<br>
-                ${loja.cidade || "Cidade não informada"} - ${loja.estado || "UF"}, CEP: ${loja.cep || "00000-000"}<br><br>
-                <strong>CNPJ:</strong><br>${loja.cnpj || "Não disponível"}
-            `;
-        }
-    });
+    if (lojaData) {
+        const endereco = lojaData.endereco;
+
+        document.getElementById("aba-sobre").innerHTML = `
+            ${lojaData.descricao || "Descrição não disponível"}<br><br>
+            <strong>Endereço:</strong><br>
+            ${endereco?.logradouro ?? ''}, ${endereco?.numero ?? ''}<br>
+            ${endereco?.bairro ?? ''} - ${endereco?.cidade ?? ''}/${endereco?.estado ?? ''}<br>
+            CEP: ${endereco?.cep ?? ''}<br><br>
+            <strong>CNPJ:</strong><br>${lojaData.cnpj || "Não disponível"}
+        `;
+    }
+});
 
     // 🔥 Agora tornamos as funções globais:
     window.fecharModal = function () {
