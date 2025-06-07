@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/pedido/finalizar", {
+      const response = await fetch("https://clickfood.shop/api/pedido/finalizar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 2. Buscar CPF do usuário pela API
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/usuario/list/${userId}`);
+    const response = await fetch(`https://clickfood.shop/api/usuario/list/${userId}`);
     let data = await response.json();
     let dataU = data[0]
     console.log(dataU.cpf);
@@ -155,7 +155,7 @@ async function exibirCartoes() {
   const btnAdd = document.getElementById("btn-adicionar-cartao");
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/cartao/list", {
+    const response = await fetch("https://clickfood.shop/api/cartao/list", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

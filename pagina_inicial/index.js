@@ -373,6 +373,8 @@ window.addEventListener("headerLoaded", function () {
 
     document.getElementById("closeAddressDetails").addEventListener("click", () => {
         document.getElementById("addressDetailsModal").style.display = "none";
+        document.getElementById("editAddressModal").style.display = "none";
+        document.getElementById("editOverlay").style.display = "none";
     });
 
 
@@ -585,6 +587,7 @@ window.addEventListener("headerLoaded", function () {
     function closeEditModal() {
         document.getElementById("editAddressModal").style.display = "none";
         document.getElementById("editOverlay").style.display = "none";
+        document.getElementsByClassName("modal_v2").style.display = "none";
         document.getElementById("modal_v2").style.display = "none";
     }
 

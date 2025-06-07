@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response_loja = await fetch(`http://127.0.0.1:8000/api/loja/${lojaId}`);
+        const response_loja = await fetch(`https://clickfood.shop/api/loja/${lojaId}`);
         const data = await response_loja.json();
         localStorage.setItem("detalhes_loja", JSON.stringify(data));
 
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("nota-loja").textContent = data.nota || "4.5"; // substitua se você tiver esse campo
 
 
-        const response_produtos_loja = await fetch(`http://127.0.0.1:8000/api/lojas/${lojaId}/produtos`);
+        const response_produtos_loja = await fetch(`https://clickfood.shop/api/lojas/${lojaId}/produtos`);
         const produtos = await response_produtos_loja.json();
 
         console.log(produtos); // Confirma o retorno

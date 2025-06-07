@@ -1,3 +1,18 @@
+/* Força largura total em mobile */
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+
+}
+
+/* Garante que sections e containers ocupem toda a tela */
+main, section, .cabecalho-loja, .produtos {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .produtos {
     display: flex;
     flex-wrap: wrap;
@@ -216,7 +231,7 @@
   .carrinho-lateral {
     position: fixed;
     top: 0;
-    right: -400px;
+    right: -800px;
     width: 360px;
     height: 100%;
     background: white;
@@ -309,4 +324,143 @@
 
 .acoes-carrinho .remover:hover {
   background-color: #c0392b;
+}
+@media (max-width: 768px) {
+  /* Cabeçalho da loja */
+  .cabecalho-loja {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .logo-loja {
+    width: 50px;
+    height: 50px;
+  }
+
+  .info-loja h2 {
+    font-size: 18px;
+  }
+
+  .avaliacao-loja {
+    font-size: 13px;
+  }
+
+  #btn-ver-mais {
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+
+  /* Produtos */
+  .produtos {
+    justify-content: center;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .produto-card {
+    width: 100%;
+    max-width: 90%;
+  }
+
+  /* Modal lateral */
+  .modal-lateral {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  /* Modal do produto */
+  .conteudo-modal-produto {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .info-produto {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-produto img {
+        width: 96%;
+        max-width: 186px;
+        height: 128px;
+        margin-top: 27px;
+  }
+
+  .dados {
+    width: 100%;
+  }
+
+  .acoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #btn-adicionar {
+    width: 100%;
+  }
+
+  /* Modal do carrinho */
+  .carrinho-lateral {
+    width: 90%;
+    right: -500%;
+  }
+
+  .carrinho-lateral.ativo {
+    right: 0px;
+    width: 255px;
+  }
+
+  .conteudo-carrinho {
+    padding: 15px;
+  }
+
+  #resumo-carrinho button {
+    font-size: 14px;
+    padding: 10px;
+  }
+    .logo a {
+    font-size: 20px;
+  }
+}
+
+
+/* Reforço para dispositivos móveis */
+@media (max-width: 480px) {
+  .produto-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .modal-lateral {
+    width: 70% !important;
+    max-width: 89% !important;
+  }
+      .carrinho-lateral.ativo {
+        right: 0px;
+        width: 272px;
+    }
+ 
+  .cabecalho-loja {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .info-loja h2 {
+    font-size: 16px !important;
+  }
+
+  .avaliacao-loja {
+    font-size: 12px !important;
+  }
+
+  .produtos {
+    padding: 10px !important;
+    gap: 10px !important;
+  }
+}
+@media (max-width: 374px) {
+ .logo a {
+    font-size: 12px !important;
+  }
 }

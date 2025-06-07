@@ -108,7 +108,7 @@
                 const token = localStorage.getItem("token");
                 const pedidoId = localStorage.getItem("ultimo_pedido_id");
 
-                fetch(`http://127.0.0.1:8000/api/pedido/${pedidoId}/status`, {
+                fetch(`https://clickfood.shop/api/pedido/${pedidoId}/status`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
