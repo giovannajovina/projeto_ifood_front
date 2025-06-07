@@ -351,7 +351,30 @@ nav ul li a {
         display: none;
     }
 }
+@media (max-width: 1030px) {
+.close-btn {
+    margin: 15px 85px 0px 0px !important;
+}
+}
+@media (max-width: 578px) {
+.close-btn {
+    margin: 15px 131px 0px 0px !important;
+}
+}
+
+@media (max-width: 338px) {
+.logo a {
+    font-size: 14px;
+}
+.close-btn {
+    cursor: pointer;
+    font-size: 32px;
+    float: right;
+    margin: 15px 129px 0px 0px !important;
+}
+}
 @media (max-width: 773px) {
+
     .search-bar input {
         width: 45px;
     }
@@ -654,10 +677,11 @@ nav ul li a {
 }
 
 .modal_loc-content {
-   width: 50%;
-   padding: 25px;
-   overflow-y: scroll;
+    width: 50%;
+    padding: 25px;
+    overflow-y: scroll;
     scrollbar-color: #dcdcdc transparent;
+    height: 100%;
     background-color: #fff;
 }
 
